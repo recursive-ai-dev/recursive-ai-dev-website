@@ -370,9 +370,42 @@ const ProjectCard = ({ project, index, onSelect }: { project: Project; index: nu
   );
 };
 
+const LyricsBar = ({ project, onSelect }: { project: Project; onSelect: (p: Project) => void }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      className="group relative bg-gradient-to-b from-zinc-900/90 to-black/95 border border-zinc-800/50
+                 hover:border-zinc-600/60 transition-all duration-500 overflow-hidden cursor-pointer col-span-full"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => onSelect(project)}
+    >
+      <div className={`absolute inset-0 bg-gradient-radial from-zinc-800/20 via-transparent to-transparent
+                       transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'}`} />
+      <div className="relative flex items-center gap-4 p-3 md:p-4">
+        <span className="text-2xl opacity-60">{categoryInfo[project.category].icon}</span>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-lg font-bold text-zinc-100 tracking-wide">{project.title}</h3>
+          <p className="text-zinc-400 text-sm leading-relaxed truncate">{project.description}</p>
+        </div>
+        <span className="text-xs font-mono tracking-wider px-2 py-0.5 border text-amber-400 border-amber-800/50 shrink-0">
+          {project.type}
+        </span>
+        <div className="flex items-center gap-2 text-xs text-zinc-400 shrink-0">
+          <span>View Details</span>
+          <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Section = ({ category, onSelectProject }: { category: ProjectCategory; onSelectProject: (p: Project) => void }) => {
   const info = categoryInfo[category];
   const categoryProjects = projectsByCategory[category];
+  const normalProjects = categoryProjects.filter(p => p.type !== 'lyrics');
+  const lyricsProject = categoryProjects.find(p => p.type === 'lyrics');
 
   return (
     <section className="py-16 px-6 md:px-12 lg:px-24">
@@ -386,10 +419,16 @@ const Section = ({ category, onSelectProject }: { category: ProjectCategory; onS
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categoryProjects.map((project, index) => (
+          {normalProjects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} onSelect={onSelectProject} />
           ))}
         </div>
+
+        {lyricsProject && (
+          <div className="mt-6">
+            <LyricsBar project={lyricsProject} onSelect={onSelectProject} />
+          </div>
+        )}
       </div>
     </section>
   );
