@@ -1,0 +1,35 @@
+#include <tunables/global>
+
+profile labyr-daemon flags=(attach_disconnected) {
+    #include <abstractions/base>
+    #include <abstractions/nameservice>
+
+    /etc/ld.so.cache r,
+    /etc/ld.so.preload r,
+    /lib/** rm,
+    /lib64/** rm,
+    /usr/lib/** rm,
+
+    /opt/labyr/** rw,
+    /var/run/labyr/** rw,
+    /var/log/labyr/** w,
+
+    /tmp/** rw,
+    /dev/shm/** rw,
+
+    deny /etc/shadow r,
+    deny /etc/gshadow r,
+    deny /root/** rw,
+    deny /home/** rw,
+
+    deny network inet,
+    deny network inet6,
+    network unix,
+
+    deny capability sys_admin,
+    deny capability sys_ptrace,
+    deny capability sys_module,
+    deny capability sys_rawio,
+    deny mount,
+    deny umount,
+}

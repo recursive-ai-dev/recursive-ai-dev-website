@@ -1,0 +1,55 @@
+#!/bin/sh
+# Labyr Guest VM Init Script
+# This is PID 1 for the ephemeral VM
+
+echo "=========================================="
+echo "  Labyr Ephemeral VM - Guest Init"
+echo "=========================================="
+
+echo "[init] Mounting essential filesystems..."
+mount -t proc proc /proc || echo "[warn] Failed to mount /proc"
+mount -t sysfs sysfs /sys || echo "[warn] Failed to mount /sys"
+mount -t devtmpfs devtmpfs /dev || echo "[warn] Failed to mount /dev"
+mount -t tmpfs tmpfs /tmp -o size=64M || echo "[warn] Failed to mount /tmp"
+mount -t tmpfs tmpfs /var/run -o size=16M || echo "[warn] Failed to mount /var/run"
+
+echo "[init] Creating writable overlay..."
+mount -t tmpfs tmpfs /home -o size=32M
+mount -t tmpfs tmpfs /opt/labyr/data -o size=128M
+mkdir -p /home/guest
+mkdir -p /var/run/labyr
+
+echo "labyr-guest" > /proc/sys/kernel/hostname
+
+echo "[init] Configuring loopback..."
+ip link set lo up 2>/dev/null || true
+
+echo "[init] Running init scripts..."
+if [ -d /etc/init.d ]; then
+    for script in /etc/init.d/S*; do
+        if [ -x "$script" ]; then
+            echo "[init] Running $script"
+            "$script" start
+        fi
+    done
+fi
+
+echo "[init] Applying security restrictions..."
+
+if command -v capsh >/dev/null 2>&1; then
+    echo "[init] Dropping capabilities..."
+    capsh --drop=cap_sys_admin,cap_sys_ptrace,cap_sys_module -- \
+        --secbits=0x00000000 || true
+fi
+
+echo "[init] Starting Labyr Daemon..."
+if [ -x /opt/labyr/bin/labyr_daemon ]; then
+    exec /opt/labyr/bin/labyr_daemon \
+        --socket /var/run/labyr/api.sock \
+        --config /opt/labyr/etc/labyrinth_config.json \
+        --data-dir /opt/labyr/data
+else
+    echo "[error] Labyr daemon not found!"
+    echo "[info] Entering recovery shell..."
+    exec /bin/sh
+fi

@@ -1,0 +1,17 @@
+#!/bin/sh
+# Labyr RC Startup Script
+
+echo "Running rcS..."
+
+export PATH="/bin:/sbin:/opt/labyr/bin"
+
+umask 077
+
+mkdir -p /var/run/labyr
+mkdir -p /tmp/labyr
+
+if [ -x /sbin/syslogd ]; then
+    syslogd -n -O /var/log/messages &
+fi
+
+echo "rcS complete"

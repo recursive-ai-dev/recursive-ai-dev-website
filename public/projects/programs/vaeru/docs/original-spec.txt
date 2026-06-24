@@ -1,0 +1,2866 @@
+SYNTHETIC INTELLIGENCE SPECIFICATION
+Offensive/Defensive Security SI — CentOS Production Architecture
+Single-System, Time-Agnostic, Full-Draft
+PART I: FOUNDATIONAL SPECIFICATION
+DESIGNATION
+VAERU — Variance-Adaptive Entropic Reasoning Unit
+
+(Designation reflects functional identity: the system exists to measure, exploit, and collapse variance across adversarial state-spaces. No lineage implied.)
+
+ABSTRACTED PRIMITIVES
+The following primitives are stripped of source-domain meaning. They are listed by functional role only.
+
+Primitive ID	Functional Description	Source Domain (Discarded)
+P1	Gradient Follower — detects directional change in a scalar field and propagates position toward extrema	Calculus / Optimization
+P2	Membrane Filter — passes or blocks signal based on dynamic threshold comparison; threshold adjusts based on traffic history	Cell Biology
+P3	Phase Detector — identifies when a system crosses qualitative behavioral boundaries; outputs a binary transition signal	Physics / Phase Transitions
+P4	Residue Accumulator — stores unresolved differentials between expected and observed states; decays if unaddressed	Immunology / Memory
+P5	Lattice Traverser — enumerates valid paths through a discrete constraint graph; prunes by accumulated cost	Graph Theory / Combinatorics
+P6	Signal Inverter — takes an active pattern and produces its structural complement; operates on both syntax and sequence	Logic / Information Theory
+P7	Pressure Distributor — when load on one node exceeds threshold, redistributes pressure across adjacent nodes proportionally	Fluid Dynamics
+P8	Echo Encoder — stores a compressed representation of a previous state and re-emits it under configurable trigger conditions	Acoustics / Memory Systems
+P9	Coherence Arbiter — compares multiple simultaneous signals and selects the one with highest internal consistency; discards outliers	Statistical Mechanics
+P10	Decay Scheduler — assigns time-weighted relevance to stored states; irrelevant states dissolve into background noise	Thermodynamics
+P11	Topology Mutator — restructures the active connection graph of the system based on observed flow patterns	Network Science
+P12	Causal Tracer — walks backward through event logs to identify which prior state change caused the current anomaly	Epidemiology / Causality
+ARCHITECTURAL DESCRIPTION
+VAERU is a closed-loop, self-regulating synthetic intelligence designed to operate simultaneously as a structural attack surface analyst and adaptive threat suppression engine on a CentOS host or cluster. It does not separate offense and defense as modes; both are expressions of the same underlying process — variance exploitation. The system treats any detectable difference between an expected and an observed system state as a surface to be operated upon, either to collapse the variance (defensive) or to amplify and weaponize it (offensive). This duality is not a design choice but an architectural inevitability: the same measurement that identifies a weakness in an adversary's surface also identifies a weakness in the host system, and VAERU addresses both simultaneously.
+
+Structural Layers:
+
+VAERU operates across four non-sequential, mutually-referential functional zones:
+
+Zone 1 — Observation Substrate
+P1 (Gradient Follower), P3 (Phase Detector), and P12 (Causal Tracer) operate in continuous parallel. P1 scans entropy gradients across process behavior, filesystem activity, network socket states, and kernel call patterns. P3 monitors for qualitative behavioral transitions — not anomaly thresholds, but structural phase shifts indicating a system has changed what it is doing, not merely how much. P12 walks event chains backward to assign causal parentage to observed deviations. These three primitives share no direct channel; they write independently to a shared Differential Register — a live, decaying table of unresolved state discrepancies.
+
+Zone 2 — Residue Processing Core
+P4 (Residue Accumulator) reads the Differential Register continuously. Residues with causal chains identified by P12 are weighted higher. P10 (Decay Scheduler) applies time-weighted decay to all residues — unaddressed residues gain weight; resolved residues dissolve. P9 (Coherence Arbiter) arbitrates between competing residue interpretations when multiple causal paths exist, selecting the interpretation with the greatest internal consistency across all three observation primitives. This zone is the interpretive engine — it produces classified threat objects, each carrying an origin trace, a confidence weight, and a decay timer.
+
+Zone 3 — Action Generation Surface
+P5 (Lattice Traverser) takes each classified threat object and enumerates operationally valid response paths through the system's constraint graph — a live representation of what actions are permissible given current system state, privilege level, and policy rules encoded at initialization. P6 (Signal Inverter) generates structural complements of identified threat signatures — used offensively to construct probes that mirror adversarial technique, and defensively to produce detection rules that are syntactically inverse to known attack patterns, catching both the original and its evasion variants. P2 (Membrane Filter) gates all generated actions through a dynamic threshold comparison against historical action costs and system stability metrics — it prevents VAERU from destabilizing the host in the act of defending it.
+
+Zone 4 — Systemic Adaptation Layer
+P7 (Pressure Distributor) monitors load accumulation across all active action channels and redistributes computational and operational pressure to prevent single-point bottlenecks. P8 (Echo Encoder) stores compressed snapshots of high-confidence prior threat states and re-emits them as comparison baselines when future states appear structurally similar — this is not pattern matching, it is structural resonance detection. P11 (Topology Mutator) rewrites the active connection graph of VAERU itself based on observed flow patterns, dynamically repositioning which primitives route into which zones — the system restructures its own architecture in response to the environment it is operating within.
+
+The four zones form a closed loop: adaptation output from Zone 4 feeds back into Zone 1's gradient measurements, completing a self-referential circuit that allows VAERU to evolve its own observational sensitivity over time.
+
+DYNAMIC BEHAVIOR
+State Initialization
+At boot, VAERU reads three inputs from the CentOS host environment:
+
+Baseline Snapshot — /proc, /sys, active ss socket table, auditd log tail, rpm -Va output, running systemd unit states
+Policy Constraint File — a human-authored file defining permissible action classes, forbidden targets, and operational mode (offensive probe enabled / disabled)
+Seed Residue Table — optionally pre-populated with known threat signatures; if absent, VAERU begins from zero
+The Differential Register initializes empty. P3 calibrates its phase boundary detectors against the baseline snapshot. P10 begins all decay timers. The system enters active observation immediately — there is no warm-up window.
+
+Observation Cycle (Continuous, ~50–200ms tick, configurable)
+text
+
+[P1: scan entropy gradients across monitored surfaces]
+        ↓
+[P3: test for phase boundary crossings]
+        ↓
+[P12: trace causal parentage of all flagged deviations]
+        ↓
+[Write to Differential Register with causal weight]
+        ↓
+[P4: accumulate residues / P10: apply decay]
+        ↓
+[P9: arbitrate competing interpretations]
+        ↓
+[Emit classified threat objects → Zone 3]
+The cycle is not a pipeline — P1, P3, and P12 run in parallel. They write asynchronously to the Differential Register. P9's arbitration step is the only synchronization point.
+
+Action Cycle (Event-driven, triggered by classified threat object emission)
+text
+
+[P5: traverse constraint graph for valid response paths]
+        ↓
+[P6: generate structural complements (offensive/defensive dual)]
+        ↓
+[P2: gate actions through dynamic membrane threshold]
+        ↓
+[Execute permissible actions / queue remainder]
+        ↓
+[P7: redistribute pressure across action channels]
+        ↓
+[P8: encode high-confidence states as echo baselines]
+        ↓
+[P11: update topology if flow patterns warrant restructuring]
+        ↓
+[Feed topology delta back to Zone 1 observation parameters]
+State Evolution
+VAERU's internal state is not static between cycles. Four dynamic structures evolve continuously:
+
+Differential Register: a decaying table; grows under attack, shrinks during quiet periods
+Constraint Graph: modified by P11; topology shifts as the system learns which action paths are productive
+Echo Library: grows over time as P8 encodes baselines; bounded by configurable memory ceiling with oldest entries evicted first
+Residue Weight Table: maintained by P4/P10 jointly; high-weight residues trigger escalated response paths in P5
+PART II: PRODUCTION IMPLEMENTATION — CentOS
+SYSTEM ARCHITECTURE OVERVIEW
+text
+
+┌─────────────────────────────────────────────────────────────────┐
+│                        VAERU RUNTIME                            │
+│                                                                 │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
+│  │  ZONE 1      │  │  ZONE 2      │  │  ZONE 3              │  │
+│  │  Observation │→│  Residue     │→│  Action Generation   │  │
+│  │  Substrate   │  │  Processing  │  │  Surface             │  │
+│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
+│         ↑                                        │              │
+│         └──────────────────────────────────────→ │              │
+│                  ┌──────────────────────────────┘              │
+│                  ↓                                              │
+│         ┌──────────────────┐                                   │
+│         │  ZONE 4          │                                   │
+│         │  Adaptation      │                                   │
+│         └──────────────────┘                                   │
+│                                                                 │
+│  ┌────────────────────────────────────────────────────────┐    │
+│  │              SHARED STATE LAYER                        │    │
+│  │  Differential Register | Constraint Graph              │    │
+│  │  Echo Library          | Residue Weight Table          │    │
+│  └────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────┘
+DIRECTORY STRUCTURE
+text
+
+/opt/vaeru/
+├── bin/
+│   ├── vaeru-core          # Main runtime binary (C, compiled)
+│   ├── vaeru-probe         # Offensive probe engine (compiled, gated)
+│   ├── vaeru-ctl           # CLI control interface
+│   └── vaeru-audit         # Log and state inspection tool
+├── conf/
+│   ├── policy.conf         # Constraint and permission definitions
+│   ├── surfaces.conf       # Monitored surface definitions
+│   ├── decay.conf          # Decay rate and weight parameters
+│   └── topology.conf       # Initial topology map
+├── lib/
+│   ├── primitives/
+│   │   ├── p1_gradient.so
+│   │   ├── p2_membrane.so
+│   │   ├── p3_phase.so
+│   │   ├── p4_residue.so
+│   │   ├── p5_lattice.so
+│   │   ├── p6_inverter.so
+│   │   ├── p7_pressure.so
+│   │   ├── p8_echo.so
+│   │   ├── p9_coherence.so
+│   │   ├── p10_decay.so
+│   │   ├── p11_topology.so
+│   │   └── p12_tracer.so
+│   └── shared/
+│       ├── diffregister.so  # Differential Register shared memory manager
+│       ├── statebus.so      # Internal state bus
+│       └── cryptoseal.so    # State integrity layer
+├── state/
+│   ├── diff_register.db     # Live differential register (tmpfs recommended)
+│   ├── constraint_graph.db  # Current constraint topology
+│   ├── echo_library.db      # Encoded echo baselines
+│   └── residue_table.db     # Current residue weight table
+├── log/
+│   ├── vaeru.log            # Primary operational log
+│   ├── threat.log           # Classified threat object log
+│   ├── action.log           # Action execution log
+│   └── topology.log         # Topology mutation events
+├── data/
+│   ├── seed_residues/       # Optional pre-populated threat signatures
+│   └── baselines/           # Stored system baseline snapshots
+└── systemd/
+    └── vaeru.service        # Systemd unit file
+INSTALLATION — FULL PRODUCTION SCRIPT
+Bash
+
+#!/usr/bin/env bash
+# VAERU Installation Script — CentOS Production
+# Run as root. Tested on CentOS 7/8/Stream.
+
+set -euo pipefail
+IFS=$'\n\t'
+
+###############################################################################
+# SECTION 0: ENVIRONMENT VALIDATION
+###############################################################################
+
+REQUIRED_CMDS=(gcc make cmake python3 pip3 systemctl auditd ss lsof rpm find awk sed)
+
+echo "[VAERU] Validating environment..."
+for cmd in "${REQUIRED_CMDS[@]}"; do
+    if ! command -v "$cmd" &>/dev/null; then
+        echo "[ERROR] Required command not found: $cmd"
+        exit 1
+    fi
+done
+
+OS_ID=$(. /etc/os-release && echo "$ID")
+if [[ "$OS_ID" != "centos" ]]; then
+    echo "[WARN] Non-CentOS system detected: $OS_ID — proceeding with caution"
+fi
+
+###############################################################################
+# SECTION 1: DEPENDENCY INSTALLATION
+###############################################################################
+
+echo "[VAERU] Installing system dependencies..."
+
+yum groupinstall -y "Development Tools" 2>/dev/null || true
+yum install -y \
+    epel-release \
+    gcc \
+    gcc-c++ \
+    make \
+    cmake \
+    python3 \
+    python3-pip \
+    python3-devel \
+    libpcap \
+    libpcap-devel \
+    libnet \
+    libnet-devel \
+    libnl3 \
+    libnl3-devel \
+    openssl \
+    openssl-devel \
+    sqlite \
+    sqlite-devel \
+    audit \
+    audit-libs \
+    audit-libs-devel \
+    libbpf \
+    libbpf-devel \
+    elfutils-libelf-devel \
+    iproute \
+    net-tools \
+    lsof \
+    strace \
+    ltrace \
+    tcpdump \
+    nmap \
+    hping3 \
+    ncrack \
+    curl \
+    wget \
+    jq \
+    rsync \
+    tar \
+    bzip2 \
+    zlib-devel
+
+pip3 install --upgrade pip
+pip3 install \
+    scapy \
+    psutil \
+    networkx \
+    numpy \
+    scipy \
+    pyzmq \
+    cryptography \
+    pyyaml \
+    click \
+    rich \
+    watchdog \
+    python-audit \
+    netfilterqueue
+
+###############################################################################
+# SECTION 2: DIRECTORY STRUCTURE CREATION
+###############################################################################
+
+echo "[VAERU] Creating directory structure..."
+
+VAERU_HOME="/opt/vaeru"
+
+mkdir -p \
+    "$VAERU_HOME/bin" \
+    "$VAERU_HOME/conf" \
+    "$VAERU_HOME/lib/primitives" \
+    "$VAERU_HOME/lib/shared" \
+    "$VAERU_HOME/state" \
+    "$VAERU_HOME/log" \
+    "$VAERU_HOME/data/seed_residues" \
+    "$VAERU_HOME/data/baselines" \
+    "$VAERU_HOME/systemd" \
+    "$VAERU_HOME/src"
+
+chmod 750 "$VAERU_HOME"
+chmod 700 "$VAERU_HOME/state"
+chmod 700 "$VAERU_HOME/log"
+
+###############################################################################
+# SECTION 3: CONFIGURATION FILES
+###############################################################################
+
+echo "[VAERU] Writing configuration files..."
+
+# --- policy.conf ---
+cat > "$VAERU_HOME/conf/policy.conf" << 'EOF'
+# VAERU Policy Constraint File
+# Defines permissible action classes, forbidden targets, operational mode
+
+[operational_mode]
+offensive_probe_enabled = false        # Set true to enable P6 probe emission
+defensive_active = true
+topology_mutation_enabled = true
+echo_encoding_enabled = true
+
+[action_classes]
+# Permissible defensive actions
+allow_iptables_block = true
+allow_process_signal = true           # SIGSTOP / SIGKILL on threat processes
+allow_file_quarantine = true          # Move suspicious files to quarantine dir
+allow_socket_teardown = true          # Forcibly close suspicious connections
+allow_audit_rule_injection = true     # Add auditd rules in response to threats
+
+# Permissible offensive probe actions (requires offensive_probe_enabled = true)
+allow_syn_probe = false               # TCP SYN probing of identified adversary IPs
+allow_fingerprint_probe = false       # OS/service fingerprinting probes
+allow_payload_reflection = false      # Reflect modified adversarial payloads
+
+[forbidden_targets]
+# Never act against these regardless of threat score
+protected_ips = 127.0.0.1,::1
+protected_processes = init,systemd,sshd,vaeru-core
+protected_paths = /boot,/etc/vaeru,/opt/vaeru
+
+[thresholds]
+threat_escalation_weight = 0.72       # Residue weight to trigger active response
+membrane_action_gate = 0.55           # P2 gate threshold
+phase_transition_sensitivity = 0.60   # P3 sensitivity
+causal_confidence_minimum = 0.40      # P12 minimum confidence to emit causal link
+coherence_selection_margin = 0.15     # P9 margin required to select interpretation
+
+[decay]
+residue_half_life_seconds = 300       # Unaddressed residues double weight every N seconds
+echo_eviction_threshold = 1000        # Max echo library entries
+state_flush_interval_seconds = 3600   # Full state flush cycle
+
+EOF
+
+# --- surfaces.conf ---
+cat > "$VAERU_HOME/conf/surfaces.conf" << 'EOF'
+# VAERU Monitored Surface Definitions
+# Each surface is a named observation target with scan parameters
+
+[surface.proc_entropy]
+type = filesystem_scan
+path = /proc
+scan_fields = cmdline,status,maps,fd,net/tcp,net/tcp6,net/udp
+interval_ms = 100
+gradient_sensitivity = high
+
+[surface.syscall_audit]
+type = auditd_stream
+rules_file = /opt/vaeru/conf/audit_rules.conf
+buffer_size = 8192
+interval_ms = 50
+
+[surface.network_sockets]
+type = socket_table
+tool = ss
+flags = -tunapo
+interval_ms = 150
+
+[surface.filesystem_integrity]
+type = inode_watch
+paths = /etc,/usr/bin,/usr/sbin,/bin,/sbin,/lib,/lib64,/opt
+watch_events = modify,create,delete,attrib
+interval_ms = 200
+
+[surface.package_integrity]
+type = rpm_verify
+interval_seconds = 3600
+flags = -Va
+deviation_types = size,md5,permissions,owner,group,mtime,capabilities
+
+[surface.kernel_modules]
+type = module_watch
+path = /proc/modules
+interval_ms = 500
+
+[surface.systemd_units]
+type = unit_state_watch
+interval_ms = 1000
+
+[surface.cron_jobs]
+type = filesystem_scan
+paths = /etc/cron.d,/etc/cron.daily,/etc/cron.hourly,/var/spool/cron
+interval_seconds = 60
+
+[surface.suid_sgid]
+type = filesystem_scan
+path = /
+find_flags = -perm /6000
+interval_seconds = 1800
+
+[surface.listening_ports]
+type = socket_table
+tool = ss
+flags = -tlnp
+interval_ms = 500
+
+EOF
+
+# --- decay.conf ---
+cat > "$VAERU_HOME/conf/decay.conf" << 'EOF'
+# VAERU Decay and Weight Parameters
+
+[residue_decay]
+base_decay_rate = 0.003               # Weight lost per second when no new signal
+escalation_rate = 0.008               # Weight gained per second when signal persists
+max_weight = 1.0
+min_weight = 0.0
+prune_threshold = 0.02                # Remove residues below this weight
+
+[echo_encoding]
+min_confidence_to_encode = 0.75
+compression_ratio = 0.40              # Store 40% of state features
+resonance_trigger_threshold = 0.68    # Similarity required to trigger echo re-emission
+
+[gradient_sensitivity]
+low = 0.05
+medium = 0.15
+high = 0.30
+
+EOF
+
+# --- topology.conf ---
+cat > "$VAERU_HOME/conf/topology.conf" << 'EOF'
+# VAERU Initial Topology Map
+# Defines initial routing between primitives and zones
+
+[zone1_to_diffregister]
+p1_weight = 1.0
+p3_weight = 1.0
+p12_weight = 1.2           # Causal traces carry higher initial weight
+
+[zone2_arbitration]
+p9_selection_basis = coherence_score
+p4_accumulation_mode = additive
+p10_decay_mode = exponential
+
+[zone3_action_routing]
+p5_max_paths = 16          # Maximum concurrent response paths evaluated
+p6_complement_depth = 3    # Structural inversion layers
+p2_gate_mode = sliding_window
+
+[zone4_adaptation]
+p11_mutation_threshold = 0.80       # Flow pattern consistency required to trigger mutation
+p11_max_mutations_per_cycle = 3
+p8_echo_trigger = structural_similarity
+p7_redistribution_mode = proportional
+
+EOF
+
+###############################################################################
+# SECTION 4: AUDIT RULES
+###############################################################################
+
+cat > "$VAERU_HOME/conf/audit_rules.conf" << 'EOF'
+# VAERU Auditd Rules — injected at runtime
+# Monitors for high-signal security events
+
+-a always,exit -F arch=b64 -S execve -k vaeru_exec
+-a always,exit -F arch=b32 -S execve -k vaeru_exec
+-a always,exit -F arch=b64 -S open,openat -F exit=-EACCES -k vaeru_access_denied
+-a always,exit -F arch=b64 -S open,openat -F exit=-EPERM -k vaeru_access_denied
+-a always,exit -F arch=b64 -S ptrace -k vaeru_ptrace
+-a always,exit -F arch=b64 -S personality -k vaeru_personality
+-a always,exit -F arch=b64 -S init_module,finit_module,delete_module -k vaeru_modules
+-a always,exit -F arch=b64 -S setuid,setgid,setreuid,setregid -k vaeru_setid
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F perm=x -k vaeru_chmod_exec
+-a always,exit -F arch=b64 -S connect -k vaeru_connect
+-a always,exit -F arch=b64 -S bind -k vaeru_bind
+-a always,exit -F path=/etc/passwd -F perm=wa -k vaeru_identity_files
+-a always,exit -F path=/etc/shadow -F perm=wa -k vaeru_identity_files
+-a always,exit -F path=/etc/sudoers -F perm=wa -k vaeru_sudo
+-a always,exit -F dir=/etc/sudoers.d -F perm=wa -k vaeru_sudo
+-a always,exit -F path=/etc/crontab -F perm=wa -k vaeru_cron
+-a always,exit -F dir=/etc/cron.d -F perm=wa -k vaeru_cron
+-a always,exit -F arch=b64 -S sched_setparam,sched_setscheduler -k vaeru_scheduler
+-a always,exit -F arch=b64 -S prctl -k vaeru_prctl
+-a always,exit -F arch=b64 -S mmap -F perm=x -k vaeru_mmap_exec
+-a always,exit -F arch=b64 -S socket -F a0=2 -k vaeru_raw_socket
+EOF
+
+###############################################################################
+# SECTION 5: PRIMITIVE IMPLEMENTATIONS
+###############################################################################
+
+echo "[VAERU] Writing primitive source files..."
+
+SRCDIR="$VAERU_HOME/src"
+
+# --- P1: Gradient Follower ---
+cat > "$SRCDIR/p1_gradient.py" << 'PYEOF'
+"""
+P1 — Gradient Follower
+Scans entropy gradients across monitored surfaces.
+Outputs directional change vectors to Differential Register.
+"""
+
+import os
+import math
+import time
+import hashlib
+import psutil
+import sqlite3
+from pathlib import Path
+from collections import defaultdict
+
+DIFF_REGISTER_DB = "/opt/vaeru/state/diff_register.db"
+SCAN_INTERVAL = 0.1  # seconds
+
+class GradientFollower:
+    def __init__(self):
+        self.previous_states = {}
+        self.db = sqlite3.connect(DIFF_REGISTER_DB, check_same_thread=False)
+        self._init_db()
+
+    def _init_db(self):
+        self.db.execute("""
+            CREATE TABLE IF NOT EXISTS differentials (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                surface TEXT NOT NULL,
+                signal_key TEXT NOT NULL,
+                gradient_magnitude REAL NOT NULL,
+                gradient_direction INTEGER NOT NULL,  -- 1 increasing, -1 decreasing
+                causal_weight REAL DEFAULT 1.0,
+                timestamp REAL NOT NULL,
+                resolved INTEGER DEFAULT 0
+            )
+        """)
+        self.db.commit()
+
+    def _compute_entropy(self, data: bytes) -> float:
+        if not data:
+            return 0.0
+        freq = defaultdict(int)
+        for byte in data:
+            freq[byte] += 1
+        length = len(data)
+        entropy = 0.0
+        for count in freq.values():
+            p = count / length
+            if p > 0:
+                entropy -= p * math.log2(p)
+        return entropy
+
+    def scan_proc_entropy(self):
+        results = []
+        for proc in psutil.process_iter(['pid', 'name', 'cmdline', 'connections',
+                                          'open_files', 'memory_maps']):
+            try:
+                pid = proc.info['pid']
+                key = f"proc_{pid}"
+                state_data = str(proc.info).encode()
+                entropy = self._compute_entropy(state_data)
+
+                if key in self.previous_states:
+                    prev = self.previous_states[key]
+                    gradient = entropy - prev
+                    if abs(gradient) > 0.05:  # sensitivity threshold
+                        results.append({
+                            'surface': 'proc_entropy',
+                            'signal_key': key,
+                            'gradient_magnitude': abs(gradient),
+                            'gradient_direction': 1 if gradient > 0 else -1,
+                            'timestamp': time.time()
+                        })
+                self.previous_states[key] = entropy
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+        return results
+
+    def scan_network_entropy(self):
+        results = []
+        try:
+            connections = psutil.net_connections(kind='all')
+            conn_data = str([(c.laddr, c.raddr, c.status, c.pid)
+                             for c in connections]).encode()
+            entropy = self._compute_entropy(conn_data)
+            key = "network_state"
+            if key in self.previous_states:
+                prev = self.previous_states[key]
+                gradient = entropy - prev
+                if abs(gradient) > 0.03:
+                    results.append({
+                        'surface': 'network_sockets',
+                        'signal_key': key,
+                        'gradient_magnitude': abs(gradient),
+                        'gradient_direction': 1 if gradient > 0 else -1,
+                        'timestamp': time.time()
+                    })
+            self.previous_states[key] = entropy
+        except Exception:
+            pass
+        return results
+
+    def scan_filesystem_entropy(self, watch_paths):
+        results = []
+        for path in watch_paths:
+            try:
+                stat = os.stat(path)
+                state_tuple = (stat.st_size, stat.st_mtime, stat.st_ctime,
+                               stat.st_mode, stat.st_uid, stat.st_gid)
+                state_data = str(state_tuple).encode()
+                entropy = self._compute_entropy(state_data)
+                key = f"fs_{path}"
+                if key in self.previous_states:
+                    prev = self.previous_states[key]
+                    gradient = entropy - prev
+                    if abs(gradient) > 0.01:
+                        results.append({
+                            'surface': 'filesystem_integrity',
+                            'signal_key': key,
+                            'gradient_magnitude': abs(gradient),
+                            'gradient_direction': 1 if gradient > 0 else -1,
+                            'timestamp': time.time()
+                        })
+                self.previous_states[key] = entropy
+            except (PermissionError, FileNotFoundError):
+                pass
+        return results
+
+    def write_differentials(self, differentials: list):
+        if not differentials:
+            return
+        self.db.executemany("""
+            INSERT INTO differentials
+            (surface, signal_key, gradient_magnitude, gradient_direction,
+             causal_weight, timestamp)
+            VALUES (:surface, :signal_key, :gradient_magnitude,
+                    :gradient_direction, 1.0, :timestamp)
+        """, differentials)
+        self.db.commit()
+
+    def run(self):
+        watch_paths = [
+            '/etc', '/usr/bin', '/usr/sbin', '/bin', '/sbin',
+            '/lib', '/lib64', '/tmp', '/var/tmp'
+        ]
+        while True:
+            differentials = []
+            differentials.extend(self.scan_proc_entropy())
+            differentials.extend(self.scan_network_entropy())
+            differentials.extend(self.scan_filesystem_entropy(watch_paths))
+            self.write_differentials(differentials)
+            time.sleep(SCAN_INTERVAL)
+
+if __name__ == "__main__":
+    gf = GradientFollower()
+    gf.run()
+PYEOF
+
+# --- P2: Membrane Filter ---
+cat > "$SRCDIR/p2_membrane.py" << 'PYEOF'
+"""
+P2 — Membrane Filter
+Gates action execution based on dynamic threshold comparison.
+Threshold adjusts based on recent action cost history.
+"""
+
+import time
+import sqlite3
+import json
+from collections import deque
+
+DIFF_REGISTER_DB = "/opt/vaeru/state/diff_register.db"
+ACTION_LOG = "/opt/vaeru/log/action.log"
+WINDOW_SIZE = 100  # sliding window of recent actions
+
+class MembraneFilter:
+    def __init__(self, base_threshold=0.55):
+        self.base_threshold = base_threshold
+        self.threshold = base_threshold
+        self.cost_window = deque(maxlen=WINDOW_SIZE)
+
+    def update_threshold(self, action_cost: float, action_success: bool):
+        self.cost_window.append({'cost': action_cost, 'success': action_success})
+        if len(self.cost_window) >= 10:
+            recent_costs = [a['cost'] for a in self.cost_window]
+            avg_cost = sum(recent_costs) / len(recent_costs)
+            success_rate = sum(1 for a in self.cost_window if a['success']) / len(self.cost_window)
+            # If average cost is high and success low, raise threshold
+            # If average cost is low and success high, lower threshold
+            adjustment = (avg_cost - 0.5) * 0.1 - (success_rate - 0.5) * 0.05
+            self.threshold = max(0.2, min(0.95,
+                                          self.base_threshold + adjustment))
+
+    def gate(self, action: dict) -> bool:
+        """
+        Returns True if action is permitted to execute.
+        Action dict must contain 'confidence' and 'cost' keys.
+        """
+        confidence = action.get('confidence', 0.0)
+        cost = action.get('cost', 1.0)
+        weighted_score = confidence / (1.0 + cost * 0.1)
+        permitted = weighted_score >= self.threshold
+        log_entry = {
+            'timestamp': time.time(),
+            'action_type': action.get('type', 'unknown'),
+            'confidence': confidence,
+            'cost': cost,
+            'threshold': self.threshold,
+            'weighted_score': weighted_score,
+            'permitted': permitted
+        }
+        with open(ACTION_LOG, 'a') as f:
+            f.write(json.dumps(log_entry) + '\n')
+        return permitted
+
+    def batch_gate(self, actions: list) -> list:
+        return [action for action in actions if self.gate(action)]
+PYEOF
+
+# --- P3: Phase Detector ---
+cat > "$SRCDIR/p3_phase.py" << 'PYEOF'
+"""
+P3 — Phase Detector
+Identifies qualitative behavioral phase transitions in system state.
+Outputs binary transition signals to Differential Register.
+"""
+
+import time
+import sqlite3
+import psutil
+import json
+from enum import Enum
+
+DIFF_REGISTER_DB = "/opt/vaeru/state/diff_register.db"
+
+class SystemPhase(Enum):
+    QUIESCENT = "quiescent"
+    ACTIVE = "active"
+    STRESSED = "stressed"
+    ANOMALOUS = "anomalous"
+    CRITICAL = "critical"
+
+class PhaseDetector:
+    def __init__(self, sensitivity=0.60):
+        self.sensitivity = sensitivity
+        self.current_phase = SystemPhase.QUIESCENT
+        self.phase_history = []
+        self.db = sqlite3.connect(DIFF_REGISTER_DB, check_same_thread=False)
+
+    def _measure_system_state(self) -> dict:
+        try:
+            cpu = psutil.cpu_percent(interval=0.1)
+            memory = psutil.virtual_memory().percent
+            net_io = psutil.net_io_counters()
+            disk_io = psutil.disk_io_counters()
+            proc_count = len(psutil.pids())
+            return {
+                'cpu': cpu,
+                'memory': memory,
+                'net_bytes_sent': net_io.bytes_sent if net_io else 0,
+                'net_bytes_recv': net_io.bytes_recv if net_io else 0,
+                'disk_read_bytes': disk_io.read_bytes if disk_io else 0,
+                'disk_write_bytes': disk_io.write_bytes if disk_io else 0,
+                'proc_count': proc_count,
+                'timestamp': time.time()
+            }
+        except Exception as e:
+            return {}
+
+    def _classify_phase(self, state: dict) -> SystemPhase:
+        cpu = state.get('cpu', 0)
+        memory = state.get('memory', 0)
+        proc_count = state.get('proc_count', 0)
+
+        # Phase classification boundaries
+        if cpu > 90 or memory > 95:
+            return SystemPhase.CRITICAL
+        elif cpu > 75 or memory > 85:
+            return SystemPhase.ANOMALOUS
+        elif cpu > 50 or memory > 70:
+            return SystemPhase.STRESSED
+        elif cpu > 15 or memory > 40:
+            return SystemPhase.ACTIVE
+        else:
+            return SystemPhase.QUIESCENT
+
+    def _is_transition(self, new_phase: SystemPhase) -> bool:
+        if not self.phase_history:
+            return False
+        # Transition if last N phases were different
+        recent = self.phase_history[-5:] if len(self.phase_history) >= 5 else self.phase_history
+        dominant = max(set(recent), key=recent.count)
+        return dominant != new_phase
+
+    def detect(self) -> dict | None:
+        state = self._measure_system_state()
+        if not state:
+            return None
+
+        new_phase = self._classify_phase(state)
+        self.phase_history.append(new_phase.value)
+        if len(self.phase_history) > 100:
+            self.phase_history = self.phase_history[-100:]
+
+        transition_detected = self._is_transition(new_phase)
+
+        if transition_detected and new_phase != self.current_phase:
+            transition = {
+                'surface': 'phase_transition',
+                'signal_key': f"phase_{self.current_phase.value}_to_{new_phase.value}",
+                'gradient_magnitude': abs(
+                    list(SystemPhase).index(new_phase) -
+                    list(SystemPhase).index(self.current_phase)
+                ) * 0.25,
+                'gradient_direction': (
+                    1 if list(SystemPhase).index(new_phase) >
+                    list(SystemPhase).index(self.current_phase) else -1
+                ),
+                'causal_weight': 1.5,  # Phase transitions carry higher initial weight
+                'timestamp': time.time()
+            }
+            self.current_phase = new_phase
+            self.db.execute("""
+                INSERT INTO differentials
+                (surface, signal_key, gradient_magnitude, gradient_direction,
+                 causal_weight, timestamp)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (
+                transition['surface'], transition['signal_key'],
+                transition['gradient_magnitude'], transition['gradient_direction'],
+                transition['causal_weight'], transition['timestamp']
+            ))
+            self.db.commit()
+            return transition
+        return None
+
+    def run(self, interval=0.5):
+        while True:
+            self.detect()
+            time.sleep(interval)
+PYEOF
+
+# --- P4: Residue Accumulator ---
+cat > "$SRCDIR/p4_residue.py" << 'PYEOF'
+"""
+P4 — Residue Accumulator
+Reads Differential Register and accumulates unresolved differentials
+into weighted residue objects.
+"""
+
+import time
+import sqlite3
+import json
+import math
+
+DIFF_REGISTER_DB = "/opt/vaeru/state/diff_register.db"
+RESIDUE_TABLE_DB = "/opt/vaeru/state/residue_table.db"
+
+class ResidueAccumulator:
+    def __init__(self):
+        self.diff_db = sqlite3.connect(DIFF_REGISTER_DB, check_same_thread=False)
+        self.residue_db = sqlite3.connect(RESIDUE_TABLE_DB, check_same_thread=False)
+        self._init_residue_db()
+
+    def _init_residue_db(self):
+        self.residue_db.execute("""
+            CREATE TABLE IF NOT EXISTS residues (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                signal_key TEXT NOT NULL UNIQUE,
+                surface TEXT NOT NULL,
+                accumulated_weight REAL NOT NULL DEFAULT 0.0,
+                first_seen REAL NOT NULL,
+                last_updated REAL NOT NULL,
+                causal_chain TEXT,
+                resolved INTEGER DEFAULT 0
+            )
+        """)
+        self.residue_db.commit()
+
+    def accumulate(self):
+        # Read unresolved differentials
+        cursor = self.diff_db.execute("""
+            SELECT surface, signal_key, gradient_magnitude, causal_weight, timestamp
+            FROM differentials
+            WHERE resolved = 0
+            ORDER BY timestamp DESC
+            LIMIT 500
+        """)
+        differentials = cursor.fetchall()
+
+        for row in differentials:
+            surface, signal_key, magnitude, causal_weight, timestamp = row
+            effective_weight = magnitude * causal_weight
+
+            existing = self.residue_db.execute(
+                "SELECT id, accumulated_weight FROM residues WHERE signal_key = ?",
+                (signal_key,)
+            ).fetchone()
+
+            if existing:
+                residue_id, current_weight = existing
+                new_weight = min(1.0, current_weight + effective_weight * 0.1)
+                self.residue_db.execute("""
+                    UPDATE residues
+                    SET accumulated_weight = ?, last_updated = ?
+                    WHERE id = ?
+                """, (new_weight, time.time(), residue_id))
+            else:
+                self.residue_db.execute("""
+                    INSERT INTO residues
+                    (signal_key, surface, accumulated_weight, first_seen, last_updated)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (signal_key, surface, effective_weight * 0.1,
+                      time.time(), time.time()))
+
+        self.residue_db.commit()
+
+    def get_high_weight_residues(self, threshold=0.4) -> list:
+        cursor = self.residue_db.execute("""
+            SELECT id, signal_key, surface, accumulated_weight, causal_chain
+            FROM residues
+            WHERE accumulated_weight >= ? AND resolved = 0
+            ORDER BY accumulated_weight DESC
+        """, (threshold,))
+        return cursor.fetchall()
+
+    def mark_resolved(self, residue_id: int):
+        self.residue_db.execute(
+            "UPDATE residues SET resolved = 1 WHERE id = ?", (residue_id,)
+        )
+        self.residue_db.commit()
+
+    def run(self, interval=0.2):
+        while True:
+            self.accumulate()
+            time.sleep(interval)
+PYEOF
+
+# --- P5: Lattice Traverser ---
+cat > "$SRCDIR/p5_lattice.py" << 'PYEOF'
+"""
+P5 — Lattice Traverser
+Enumerates valid response paths through the constraint graph.
+Produces prioritized action sets for each classified threat object.
+"""
+
+import json
+import time
+import sqlite3
+import heapq
+from typing import List, Dict, Any
+
+CONSTRAINT_GRAPH_DB = "/opt/vaeru/state/constraint_graph.db"
+
+ACTION_CATALOG = {
+    'block_ip': {
+        'cost': 0.3,
+        'requires': ['allow_iptables_block'],
+        'targets': ['ip_address'],
+        'effect': 'network_isolation'
+    },
+    'kill_process': {
+        'cost': 0.7,
+        'requires': ['allow_process_signal'],
+        'targets': ['pid'],
+        'effect': 'process_termination'
+    },
+    'stop_process': {
+        'cost': 0.4,
+        'requires': ['allow_process_signal'],
+        'targets': ['pid'],
+        'effect': 'process_suspension'
+    },
+    'quarantine_file': {
+        'cost': 0.2,
+        'requires': ['allow_file_quarantine'],
+        'targets': ['file_path'],
+        'effect': 'file_isolation'
+    },
+    'teardown_socket': {
+        'cost': 0.5,
+        'requires': ['allow_socket_teardown'],
+        'targets': ['socket_id'],
+        'effect': 'connection_termination'
+    },
+    'inject_audit_rule': {
+        'cost': 0.1,
+        'requires': ['allow_audit_rule_injection'],
+        'targets': ['syscall', 'path'],
+        'effect': 'enhanced_monitoring'
+    },
+    'alert_only': {
+        'cost': 0.01,
+        'requires': [],
+        'targets': ['any'],
+        'effect': 'notification'
+    }
+}
+
+class LatticeTraverser:
+    def __init__(self, policy: dict, max_paths: int = 16):
+        self.policy = policy
+        self.max_paths = max_paths
+        self.db = sqlite3.connect(CONSTRAINT_GRAPH_DB, check_same_thread=False)
+        self._init_db()
+
+    def _init_db(self):
+        self.db.execute("""
+            CREATE TABLE IF NOT EXISTS action_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                action_type TEXT NOT NULL,
+                target TEXT NOT NULL,
+                outcome TEXT,
+                cost_actual REAL,
+                timestamp REAL NOT NULL
+            )
+        """)
+        self.db.commit()
+
+    def _get_permitted_actions(self) -> list:
+        permitted = []
+        for action_name, action_spec in ACTION_CATALOG.items():
+            required = action_spec.get('requires', [])
+            if all(self.policy.get(req, False) for req in required):
+                permitted.append((action_name, action_spec))
+            elif not required:
+                permitted.append((action_name, action_spec))
+        return permitted
+
+    def _score_path(self, action_name: str, action_spec: dict,
+                    threat: dict) -> float:
+        base_score = threat.get('weight', 0.5)
+        cost = action_spec.get('cost', 0.5)
+        # Prefer low-cost, high-confidence paths
+        return base_score / (1.0 + cost)
+
+    def traverse(self, threat_object: dict) -> List[Dict[str, Any]]:
+        """
+        Given a threat object, return a prioritized list of action paths.
+        Uses a min-heap scored by path cost.
+        """
+        permitted = self._get_permitted_actions()
+        heap = []
+
+        for action_name, action_spec in permitted:
+            score = self._score_path(action_name, action_spec, threat_object)
+            cost = action_spec.get('cost', 0.5)
+            path = {
+                'type': action_name,
+                'spec': action_spec,
+                'confidence': threat_object.get('weight', 0.5),
+                'cost': cost,
+                'score': score,
+                'threat_id': threat_object.get('id'),
+                'target_surface': threat_object.get('surface'),
+                'generated_at': time.time()
+            }
+            heapq.heappush(heap, (-score, action_name, path))
+
+        paths = []
+        while heap and len(paths) < self.max_paths:
+            _, _, path = heapq.heappop(heap)
+            paths.append(path)
+
+        return paths
+
+    def record_outcome(self, action_type: str, target: str,
+                       outcome: str, cost_actual: float):
+        self.db.execute("""
+            INSERT INTO action_history (action_type, target, outcome, cost_actual, timestamp)
+            VALUES (?, ?, ?, ?, ?)
+        """, (action_type, target, outcome, cost_actual, time.time()))
+        self.db.commit()
+PYEOF
+
+# --- P6: Signal Inverter ---
+cat > "$SRCDIR/p6_inverter.py" << 'PYEOF'
+"""
+P6 — Signal Inverter
+Generates structural complements of threat signatures.
+Used for defensive rule generation and (when enabled) offensive probing.
+"""
+
+import re
+import json
+import time
+import hashlib
+from typing import Dict, Any, List
+
+class SignalInverter:
+    def __init__(self, inversion_depth: int = 3):
+        self.inversion_depth = inversion_depth
+
+    def _invert_ip_pattern(self, ip: str) -> dict:
+        """Generate complementary network rules for an observed IP."""
+        parts = ip.split('.')
+        if len(parts) != 4:
+            return {}
+        # Invert by generating block rule + detection rule for the /24 and /32
+        return {
+            'block_rule': f"-A INPUT -s {ip}/32 -j DROP",
+            'log_rule': f"-A INPUT -s {ip}/32 -j LOG --log-prefix 'VAERU_BLOCK: '",
+            'subnet_watch': f"{'.'.join(parts[:3])}.0/24",
+            'inverse_type': 'network_complement'
+        }
+
+    def _invert_process_signature(self, proc_data: dict) -> dict:
+        """Generate complement detection rule from process characteristics."""
+        cmdline = proc_data.get('cmdline', '')
+        uid = proc_data.get('uid', -1)
+        parent = proc_data.get('ppid', -1)
+
+        # Structural complement: watch for processes with similar but not identical signatures
+        complement_patterns = []
+        if cmdline:
+            tokens = cmdline.split()
+            # Invert by building audit rule watching for any of the tokens
+            for token in tokens[:3]:
+                if len(token) > 3:
+                    complement_patterns.append(
+                        f"-a always,exit -F arch=b64 -S execve -F a0={token} -k vaeru_complement"
+                    )
+        return {
+            'audit_rules': complement_patterns,
+            'watch_uid': uid,
+            'watch_ppid': parent,
+            'inverse_type': 'process_complement'
+        }
+
+    def _invert_syscall_pattern(self, syscall_data: dict) -> dict:
+        """Generate inverted detection for syscall sequences."""
+        syscall = syscall_data.get('syscall', '')
+        args = syscall_data.get('args', [])
+        # Complement: watch for adjacent syscalls that typically follow this one
+        syscall_follows = {
+            'ptrace': ['mmap', 'mprotect', 'execve'],
+            'mmap': ['mprotect', 'execve'],
+            'connect': ['send', 'recv', 'write'],
+            'execve': ['fork', 'clone', 'setuid'],
+            'setuid': ['execve', 'fork']
+        }
+        following = syscall_follows.get(syscall, [])
+        return {
+            'watch_syscalls': following,
+            'original_syscall': syscall,
+            'audit_rules': [
+                f"-a always,exit -F arch=b64 -S {s} -k vaeru_chain_detect"
+                for s in following
+            ],
+            'inverse_type': 'syscall_chain_complement'
+        }
+
+    def invert(self, signal: dict, signal_type: str) -> dict:
+        if signal_type == 'ip':
+            return self._invert_ip_pattern(signal.get('value', ''))
+        elif signal_type == 'process':
+            return self._invert_process_signature(signal)
+        elif signal_type == 'syscall':
+            return self._invert_syscall_pattern(signal)
+        else:
+            return {'inverse_type': 'unknown', 'raw_signal': signal}
+
+    def generate_evasion_complement(self, known_signature: str) -> list:
+        """
+        Generate signatures that catch evasion variants of a known pattern.
+        Operates by structural transformation: tokenize, permute, recombine.
+        """
+        tokens = known_signature.lower().split()
+        complements = []
+        # Simple structural permutation
+        for i, token in enumerate(tokens):
+            variant = tokens[:i] + tokens[i+1:]
+            if variant:
+                complements.append(' '.join(variant))
+        return complements[:self.inversion_depth]
+PYEOF
+
+# --- P7: Pressure Distributor ---
+cat > "$SRCDIR/p7_pressure.py" << 'PYEOF'
+"""
+P7 — Pressure Distributor
+Monitors load across active action channels.
+Redistributes computational pressure to prevent bottlenecks.
+"""
+
+import time
+import threading
+from collections import defaultdict
+from typing import Dict, List, Callable
+
+class PressureDistributor:
+    def __init__(self):
+        self.channel_loads = defaultdict(float)
+        self.channel_workers = {}
+        self.lock = threading.Lock()
+        self.max_load_per_channel = 0.85
+        self.redistribution_threshold = 0.80
+
+    def register_channel(self, channel_id: str, worker_fn: Callable):
+        with self.lock:
+            self.channel_workers[channel_id] = worker_fn
+            self.channel_loads[channel_id] = 0.0
+
+    def report_load(self, channel_id: str, load: float):
+        with self.lock:
+            self.channel_loads[channel_id] = min(1.0, max(0.0, load))
+
+    def _compute_redistribution(self) -> Dict[str, float]:
+        """Proportional redistribution of load across channels."""
+        overloaded = {k: v for k, v in self.channel_loads.items()
+                      if v > self.redistribution_threshold}
+        underloaded = {k: v for k, v in self.channel_loads.items()
+                       if v < self.redistribution_threshold * 0.5}
+
+        if not overloaded or not underloaded:
+            return {}
+
+        redistributions = {}
+        total_excess = sum(v - self.redistribution_threshold
+                           for v in overloaded.values())
+        available_capacity = sum(self.redistribution_threshold * 0.5 - v
+                                 for v in underloaded.values())
+
+        if available_capacity <= 0:
+            return {}
+
+        for channel, load in overloaded.items():
+            excess = load - self.redistribution_threshold
+            # Find best underloaded channel to absorb
+            if underloaded:
+                target = min(underloaded, key=underloaded.get)
+                redistributions[channel] = {
+                    'shed_load': excess * 0.5,
+                    'target': target
+                }
+
+        return redistributions
+
+    def distribute(self):
+        with self.lock:
+            redistributions = self._compute_redistribution()
+            for source, plan in redistributions.items():
+                self.channel_loads[source] -= plan['shed_load']
+                self.channel_loads[plan['target']] += plan['shed_load']
+        return redistributions
+
+    def monitor(self, interval=0.5):
+        while True:
+            self.distribute()
+            time.sleep(interval)
+PYEOF
+
+# --- P8: Echo Encoder ---
+cat > "$SRCDIR/p8_echo.py" << 'PYEOF'
+"""
+P8 — Echo Encoder
+Stores compressed representations of high-confidence prior states.
+Re-emits stored states when current state shows structural similarity.
+"""
+
+import json
+import time
+import math
+import sqlite3
+import hashlib
+from typing import Optional, Dict, Any
+
+ECHO_LIBRARY_DB = "/opt/vaeru/state/echo_library.db"
+RESONANCE_THRESHOLD = 0.68
+COMPRESSION_RATIO = 0.40
+MAX_ENTRIES = 1000
+
+class EchoEncoder:
+    def __init__(self):
+        self.db = sqlite3.connect(ECHO_LIBRARY_DB, check_same_thread=False)
+        self._init_db()
+
+    def _init_db(self):
+        self.db.execute("""
+            CREATE TABLE IF NOT EXISTS echoes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                state_hash TEXT NOT NULL UNIQUE,
+                compressed_features TEXT NOT NULL,
+                confidence REAL NOT NULL,
+                original_surface TEXT NOT NULL,
+                encoded_at REAL NOT NULL,
+                resonance_count INTEGER DEFAULT 0,
+                last_resonated REAL
+            )
+        """)
+        self.db.commit()
+
+    def _extract_features(self, state: dict) -> list:
+        """Extract key structural features from a state object."""
+        features = []
+        for key in sorted(state.keys()):
+            val = state[key]
+            if isinstance(val, (int, float)):
+                features.append(float(val))
+            elif isinstance(val, str):
+                features.append(float(len(val)))
+        return features
+
+    def _compress(self, features: list) -> list:
+        """Compress by retaining highest-magnitude features."""
+        if not features:
+            return []
+        indexed = sorted(enumerate(features), key=lambda x: abs(x[1]), reverse=True)
+        keep_count = max(1, int(len(indexed) * COMPRESSION_RATIO))
+        kept = sorted(indexed[:keep_count], key=lambda x: x[0])
+        return [v for _, v in kept]
+
+    def _cosine_similarity(self, a: list, b: list) -> float:
+        if not a or not b:
+            return 0.0
+        min_len = min(len(a), len(b))
+        a, b = a[:min_len], b[:min_len]
+        dot = sum(x * y for x, y in zip(a, b))
+        mag_a = math.sqrt(sum(x**2 for x in a))
+        mag_b = math.sqrt(sum(x**2 for x in b))
+        if mag_a == 0 or mag_b == 0:
+            return 0.0
+        return dot / (mag_a * mag_b)
+
+    def encode(self, state: dict, confidence: float, surface: str):
+        if confidence < 0.75:
+            return  # Only encode high-confidence states
+
+        features = self._extract_features(state)
+        compressed = self._compress(features)
+        state_hash = hashlib.sha256(json.dumps(state, sort_keys=True).encode()).hexdigest()
+
+        # Enforce eviction if at capacity
+        count = self.db.execute("SELECT COUNT(*) FROM echoes").fetchone()[0]
+        if count >= MAX_ENTRIES:
+            self.db.execute("""
+                DELETE FROM echoes WHERE id IN (
+                    SELECT id FROM echoes ORDER BY last_resonated ASC NULLS FIRST LIMIT 50
+                )
+            """)
+            self.db.commit()
+
+        try:
+            self.db.execute("""
+                INSERT OR IGNORE INTO echoes
+                (state_hash, compressed_features, confidence, original_surface, encoded_at)
+                VALUES (?, ?, ?, ?, ?)
+            """, (state_hash, json.dumps(compressed), confidence, surface, time.time()))
+            self.db.commit()
+        except Exception:
+            pass
+
+    def find_resonance(self, current_state: dict) -> Optional[Dict[str, Any]]:
+        """Check if current state resonates with any encoded echo."""
+        current_features = self._compress(self._extract_features(current_state))
+        if not current_features:
+            return None
+
+        cursor = self.db.execute("""
+            SELECT id, state_hash, compressed_features, confidence, original_surface
+            FROM echoes ORDER BY confidence DESC LIMIT 100
+        """)
+        best_match = None
+        best_similarity = 0.0
+
+        for row in cursor.fetchall():
+            echo_id, state_hash, features_json, confidence, surface = row
+            try:
+                echo_features = json.loads(features_json)
+                similarity = self._cosine_similarity(current_features, echo_features)
+                if similarity > best_similarity:
+                    best_similarity = similarity
+                    best_match = {
+                        'echo_id': echo_id,
+                        'similarity': similarity,
+                        'confidence': confidence,
+                        'surface': surface,
+                        'state_hash': state_hash
+                    }
+            except Exception:
+                pass
+
+        if best_match and best_similarity >= RESONANCE_THRESHOLD:
+            self.db.execute("""
+                UPDATE echoes SET resonance_count = resonance_count + 1, last_resonated = ?
+                WHERE id = ?
+            """, (time.time(), best_match['echo_id']))
+            self.db.commit()
+            return best_match
+        return None
+PYEOF
+
+# --- P9: Coherence Arbiter ---
+cat > "$SRCDIR/p9_coherence.py" << 'PYEOF'
+"""
+P9 — Coherence Arbiter
+Compares multiple simultaneous interpretations of Differential Register data.
+Selects the interpretation with highest internal consistency.
+"""
+
+import sqlite3
+import json
+import time
+import math
+from typing import List, Dict, Any
+
+DIFF_REGISTER_DB = "/opt/vaeru/state/diff_register.db"
+RESIDUE_TABLE_DB = "/opt/vaeru/state/residue_table.db"
+SELECTION_MARGIN = 0.15
+
+class CoherenceArbiter:
+    def __init__(self):
+        self.diff_db = sqlite3.connect(DIFF_REGISTER_DB, check_same_thread=False)
+        self.residue_db = sqlite3.connect(RESIDUE_TABLE_DB, check_same_thread=False)
+
+    def _score_coherence(self, interpretation: dict, differentials: list) -> float:
+        """
+        Score an interpretation by how consistently it explains the
+        observed differentials. Higher is more coherent.
+        """
+        score = 0.0
+        explained = 0
+        for diff in differentials:
+            surface, signal_key, magnitude, direction, weight = diff
+            # Check if interpretation surface matches
+            if interpretation.get('surface') == surface:
+                score += magnitude * weight
+                explained += 1
+            # Check directional consistency
+            if interpretation.get('expected_direction', 0) == direction:
+                score += 0.1
+
+        if not differentials:
+            return 0.0
+        return score / len(differentials) * (explained / len(differentials) + 0.001)
+
+    def arbitrate(self, interpretations: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Given a list of candidate threat interpretations,
+        select the one with the highest coherence score.
+        """
+        if not interpretations:
+            return {}
+
+        # Read recent unresolved differentials
+        cursor = self.diff_db.execute("""
+            SELECT surface, signal_key, gradient_magnitude, gradient_direction, causal_weight
+            FROM differentials
+            WHERE resolved = 0
+            ORDER BY timestamp DESC
+            LIMIT 200
+        """)
+        differentials = cursor.fetchall()
+
+        scored = []
+        for interp in interpretations:
+            coherence = self._score_coherence(interp, differentials)
+            scored.append((coherence, interp))
+
+        scored.sort(key=lambda x: x[0], reverse=True)
+
+        if len(scored) == 1:
+            return scored[0][1]
+
+        best_score, best = scored[0]
+        second_score = scored[1][0] if len(scored) > 1 else 0.0
+
+        # Only select best if margin is sufficient
+        if (best_score - second_score) >= SELECTION_MARGIN:
+            return best
+        else:
+            # Merge top interpretations when margin insufficient
+            merged = {
+                'surface': best.get('surface', 'unknown'),
+                'weight': (best_score + second_score) / 2.0,
+                'merged': True,
+                'components': [interp for _, interp in scored[:2]]
+            }
+            return merged
+
+    def emit_classified_threat(self, threat: dict) -> dict:
+        """Emit a classified threat object with coherence metadata."""
+        threat['coherence_arbitrated'] = True
+        threat['arbitrated_at'] = time.time()
+        return threat
+PYEOF
+
+# --- P10: Decay Scheduler ---
+cat > "$SRCDIR/p10_decay.py" << 'PYEOF'
+"""
+P10 — Decay Scheduler
+Applies time-weighted relevance decay to residues and differentials.
+Irrelevant states dissolve into background noise.
+"""
+
+import time
+import math
+import sqlite3
+
+DIFF_REGISTER_DB = "/opt/vaeru/state/diff_register.db"
+RESIDUE_TABLE_DB = "/opt/vaeru/state/residue_table.db"
+
+BASE_DECAY_RATE = 0.003      # Weight lost per second when signal absent
+ESCALATION_RATE = 0.008      # Weight gained per second when signal persists
+PRUNE_THRESHOLD = 0.02
+HALF_LIFE_SECONDS = 300
+
+class DecayScheduler:
+    def __init__(self):
+        self.diff_db = sqlite3.connect(DIFF_REGISTER_DB, check_same_thread=False)
+        self.residue_db = sqlite3.connect(RESIDUE_TABLE_DB, check_same_thread=False)
+        self.last_run = time.time()
+
+    def _exponential_decay(self, initial_weight: float, elapsed: float) -> float:
+        """Exponential decay function."""
+        decay_constant = math.log(2) / HALF_LIFE_SECONDS
+        return initial_weight * math.exp(-decay_constant * elapsed)
+
+    def decay_differentials(self):
+        """Mark old resolved differentials for cleanup."""
+        cutoff = time.time() - HALF_LIFE_SECONDS * 2
+        self.diff_db.execute("""
+            UPDATE differentials SET resolved = 1
+            WHERE timestamp < ? AND resolved = 0
+        """, (cutoff,))
+        # Hard delete very old resolved entries
+        self.diff_db.execute("""
+            DELETE FROM differentials
+            WHERE resolved = 1 AND timestamp < ?
+        """, (time.time() - HALF_LIFE_SECONDS * 10,))
+        self.diff_db.commit()
+
+    def decay_residues(self):
+        """Apply decay to all active residues."""
+        now = time.time()
+        cursor = self.residue_db.execute("""
+            SELECT id, accumulated_weight, last_updated
+            FROM residues WHERE resolved = 0
+        """)
+        rows = cursor.fetchall()
+
+        for row in rows:
+            residue_id, weight, last_updated = row
+            elapsed = now - last_updated
+            new_weight = self._exponential_decay(weight, elapsed)
+
+            if new_weight < PRUNE_THRESHOLD:
+                self.residue_db.execute(
+                    "UPDATE residues SET resolved = 1 WHERE id = ?", (residue_id,)
+                )
+            else:
+                self.residue_db.execute("""
+                    UPDATE residues SET accumulated_weight = ?, last_updated = ?
+                    WHERE id = ?
+                """, (new_weight, now, residue_id))
+
+        self.residue_db.commit()
+
+    def run(self, interval=5.0):
+        while True:
+            self.decay_differentials()
+            self.decay_residues()
+            time.sleep(interval)
+PYEOF
+
+# --- P11: Topology Mutator ---
+cat > "$SRCDIR/p11_topology.py" << 'PYEOF'
+"""
+P11 — Topology Mutator
+Rewrites the active connection graph of VAERU based on observed flow patterns.
+Restructures which primitives route into which zones.
+"""
+
+import json
+import time
+import sqlite3
+import os
+
+CONSTRAINT_GRAPH_DB = "/opt/vaeru/state/constraint_graph.db"
+TOPOLOGY_LOG = "/opt/vaeru/log/topology.log"
+MUTATION_THRESHOLD = 0.80
+MAX_MUTATIONS_PER_CYCLE = 3
+
+DEFAULT_TOPOLOGY = {
+    'zone1': {
+        'primitives': ['p1_gradient', 'p3_phase', 'p12_tracer'],
+        'output_target': 'differential_register',
+        'weights': {'p1_gradient': 1.0, 'p3_phase': 1.0, 'p12_tracer': 1.2}
+    },
+    'zone2': {
+        'primitives': ['p4_residue', 'p9_coherence', 'p10_decay'],
+        'output_target': 'classified_threat_objects',
+        'weights': {'p4_residue': 1.0, 'p9_coherence': 1.1, 'p10_decay': 0.8}
+    },
+    'zone3': {
+        'primitives': ['p5_lattice', 'p6_inverter', 'p2_membrane'],
+        'output_target': 'action_execution',
+        'weights': {'p5_lattice': 1.0, 'p6_inverter': 0.9, 'p2_membrane': 1.0}
+    },
+    'zone4': {
+        'primitives': ['p7_pressure', 'p8_echo', 'p11_topology'],
+        'output_target': 'zone1_feedback',
+        'weights': {'p7_pressure': 1.0, 'p8_echo': 1.1, 'p11_topology': 1.0}
+    }
+}
+
+class TopologyMutator:
+    def __init__(self):
+        self.db = sqlite3.connect(CONSTRAINT_GRAPH_DB, check_same_thread=False)
+        self._init_db()
+        self.current_topology = DEFAULT_TOPOLOGY.copy()
+        self.flow_history = []
+
+    def _init_db(self):
+        self.db.execute("""
+            CREATE TABLE IF NOT EXISTS topology_state (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                topology_json TEXT NOT NULL,
+                mutation_reason TEXT,
+                timestamp REAL NOT NULL
+            )
+        """)
+        self.db.execute("""
+            CREATE TABLE IF NOT EXISTS flow_patterns (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                primitive TEXT NOT NULL,
+                zone TEXT NOT NULL,
+                throughput REAL NOT NULL,
+                success_rate REAL NOT NULL,
+                timestamp REAL NOT NULL
+            )
+        """)
+        self.db.commit()
+
+    def record_flow(self, primitive: str, zone: str,
+                    throughput: float, success_rate: float):
+        self.db.execute("""
+            INSERT INTO flow_patterns (primitive, zone, throughput, success_rate, timestamp)
+            VALUES (?, ?, ?, ?, ?)
+        """, (primitive, zone, throughput, success_rate, time.time()))
+        self.db.commit()
+
+    def _analyze_flow_patterns(self) -> dict:
+        """Identify primitives with consistently low or high throughput."""
+        cursor = self.db.execute("""
+            SELECT primitive, zone, AVG(throughput), AVG(success_rate)
+            FROM flow_patterns
+            WHERE timestamp > ?
+            GROUP BY primitive, zone
+        """, (time.time() - 3600,))  # Last hour
+        analysis = {}
+        for row in cursor.fetchall():
+            primitive, zone, avg_throughput, avg_success = row
+            analysis[primitive] = {
+                'zone': zone,
+                'avg_throughput': avg_throughput,
+                'avg_success': avg_success
+            }
+        return analysis
+
+    def mutate(self) -> dict:
+        """
+        Analyze flow patterns and apply topology mutations
+        if pattern consistency exceeds threshold.
+        """
+        analysis = self._analyze_flow_patterns()
+        mutations = []
+        mutation_count = 0
+
+        for primitive, metrics in analysis.items():
+            if mutation_count >= MAX_MUTATIONS_PER_CYCLE:
+                break
+
+            avg_success = metrics.get('avg_success', 0)
+            avg_throughput = metrics.get('avg_throughput', 0)
+            current_zone = metrics.get('zone')
+
+            # If primitive has consistently low success and high throughput,
+            # consider moving to a lower-priority position
+            if (avg_success < 0.3 and avg_throughput > 0.7 and
+                    avg_success / max(0.001, avg_throughput) < (1 - MUTATION_THRESHOLD)):
+                mutation = {
+                    'type': 'weight_reduction',
+                    'primitive': primitive,
+                    'zone': current_zone,
+                    'old_weight': self.current_topology.get(
+                        current_zone, {}).get('weights', {}).get(primitive, 1.0),
+                    'new_weight': max(0.1, self.current_topology.get(
+                        current_zone, {}).get('weights', {}).get(primitive, 1.0) * 0.8),
+                    'reason': f"Low success rate {avg_success:.2f} with high throughput",
+                    'timestamp': time.time()
+                }
+                mutations.append(mutation)
+                mutation_count += 1
+
+        # Apply mutations
+        for mutation in mutations:
+            zone = mutation['zone']
+            primitive = mutation['primitive']
+            if zone in self.current_topology:
+                if primitive in self.current_topology[zone].get('weights', {}):
+                    self.current_topology[zone]['weights'][primitive] = mutation['new_weight']
+
+            with open(TOPOLOGY_LOG, 'a') as f:
+                f.write(json.dumps(mutation) + '\n')
+
+        # Save current topology state
+        self.db.execute("""
+            INSERT INTO topology_state (topology_json, mutation_reason, timestamp)
+            VALUES (?, ?, ?)
+        """, (
+            json.dumps(self.current_topology),
+            json.dumps([m.get('reason') for m in mutations]),
+            time.time()
+        ))
+        self.db.commit()
+        return {'mutations_applied': len(mutations), 'current_topology': self.current_topology}
+
+    def get_topology(self) -> dict:
+        return self.current_topology
+
+    def run(self, interval=60.0):
+        while True:
+            self.mutate()
+            time.sleep(interval)
+PYEOF
+
+# --- P12: Causal Tracer ---
+cat > "$SRCDIR/p12_tracer.py" << 'PYEOF'
+"""
+P12 — Causal Tracer
+Walks backward through event logs to identify which prior state change
+caused the current anomaly. Assigns causal parentage weights.
+"""
+
+import re
+import json
+import time
+import sqlite3
+import subprocess
+from typing import Optional, List, Dict, Any
+
+DIFF_REGISTER_DB = "/opt/vaeru/state/diff_register.db"
+AUDIT_LOG = "/var/log/audit/audit.log"
+
+CAUSAL_CHAIN_PATTERNS = {
+    'process_injection': {
+        'signals': ['ptrace', 'mmap', 'mprotect', 'execve'],
+        'weight_multiplier': 2.0,
+        'description': 'Process injection sequence detected'
+    },
+    'privilege_escalation': {
+        'signals': ['setuid', 'setgid', 'execve', 'chmod'],
+        'weight_multiplier': 2.5,
+        'description': 'Privilege escalation sequence detected'
+    },
+    'lateral_movement': {
+        'signals': ['connect', 'bind', 'execve', 'sshd'],
+        'weight_multiplier': 1.8,
+        'description': 'Lateral movement indicators detected'
+    },
+    'persistence': {
+        'signals': ['crontab', 'systemd', 'bashrc', 'profile'],
+        'weight_multiplier': 1.6,
+        'description': 'Persistence mechanism installation detected'
+    },
+    'data_exfiltration': {
+        'signals': ['connect', 'send', 'read', 'open'],
+        'weight_multiplier': 1.9,
+        'description': 'Data exfiltration pattern detected'
+    }
+}
+
+class CausalTracer:
+    def __init__(self, lookback_seconds: int = 300):
+        self.lookback_seconds = lookback_seconds
+        self.diff_db = sqlite3.connect(DIFF_REGISTER_DB, check_same_thread=False)
+        self.event_cache = []
+        self.min_confidence = 0.40
+
+    def _read_audit_events(self, since: float) -> List[Dict]:
+        """Read recent audit log events."""
+        events = []
+        try:
+            with open(AUDIT_LOG, 'r') as f:
+                for line in f:
+                    # Parse audit log entry
+                    match = re.search(r'msg=audit\((\d+\.\d+)', line)
+                    if match:
+                        ts = float(match.group(1))
+                        if ts >= since:
+                            event = {'raw': line.strip(), 'timestamp': ts}
+                            # Extract syscall
+                            syscall_match = re.search(r'syscall=(\S+)', line)
+                            if syscall_match:
+                                event['syscall'] = syscall_match.group(1)
+                            # Extract pid
+                            pid_match = re.search(r'\bpid=(\d+)', line)
+                            if pid_match:
+                                event['pid'] = int(pid_match.group(1))
+                            # Extract comm
+                            comm_match = re.search(r'comm="([^"]+)"', line)
+                            if comm_match:
+                                event['comm'] = comm_match.group(1)
+                            # Extract key
+                            key_match = re.search(r'key="([^"]+)"', line)
+                            if key_match:
+                                event['key'] = key_match.group(1)
+                            events.append(event)
+        except (PermissionError, FileNotFoundError):
+            pass
+        return events
+
+    def _match_causal_chain(self, events: List[Dict]) -> List[Dict]:
+        """Match event sequences against known causal chain patterns."""
+        matches = []
+        event_signals = [e.get('syscall', e.get('comm', ''))
+                         for e in events if e.get('syscall') or e.get('comm')]
+
+        for chain_name, chain_def in CAUSAL_CHAIN_PATTERNS.items():
+            required_signals = chain_def['signals']
+            matched_count = sum(1 for sig in required_signals
+                                if any(sig in s for s in event_signals))
+            coverage = matched_count / len(required_signals)
+
+            if coverage >= 0.5:  # At least half the chain signals present
+                confidence = coverage * 0.85 + (0.15 if matched_count > 3 else 0)
+                if confidence >= self.min_confidence:
+                    matches.append({
+                        'chain_type': chain_name,
+                        'confidence': confidence,
+                        'weight_multiplier': chain_def['weight_multiplier'],
+                        'description': chain_def['description'],
+                        'matched_signals': matched_count,
+                        'total_signals': len(required_signals),
+                        'events_analyzed': len(events)
+                    })
+
+        return matches
+
+    def trace(self, signal_key: str) -> Dict[str, Any]:
+        """Trace causal ancestry for a given signal key."""
+        since = time.time() - self.lookback_seconds
+        events = self._read_audit_events(since)
+        causal_matches = self._match_causal_chain(events)
+
+        if not causal_matches:
+            return {
+                'signal_key': signal_key,
+                'causal_confidence': 0.0,
+                'chain_type': 'unknown',
+                'description': 'No causal chain identified',
+                'weight_adjustment': 1.0
+            }
+
+        # Select highest-confidence match
+        best_match = max(causal_matches, key=lambda x: x['confidence'])
+
+        result = {
+            'signal_key': signal_key,
+            'causal_confidence': best_match['confidence'],
+            'chain_type': best_match['chain_type'],
+            'description': best_match['description'],
+            'weight_adjustment': best_match['weight_multiplier'],
+            'traced_at': time.time()
+        }
+
+        # Update differential register with causal weight
+        self.diff_db.execute("""
+            UPDATE differentials
+            SET causal_weight = causal_weight * ?
+            WHERE signal_key = ? AND resolved = 0
+        """, (best_match['weight_multiplier'], signal_key))
+        self.diff_db.commit()
+
+        return result
+
+    def run_continuous(self, interval=5.0):
+        while True:
+            # Get recent unresolved differentials that lack causal weight > 1
+            cursor = self.diff_db.execute("""
+                SELECT DISTINCT signal_key FROM differentials
+                WHERE resolved = 0 AND causal_weight <= 1.0
+                LIMIT 50
+            """)
+            signal_keys = [row[0] for row in cursor.fetchall()]
+            for key in signal_keys:
+                self.trace(key)
+            time.sleep(interval)
+PYEOF
+
+###############################################################################
+# SECTION 6: CORE ORCHESTRATOR
+###############################################################################
+
+cat > "$SRCDIR/vaeru_core.py" << 'PYEOF'
+"""
+VAERU Core Orchestrator
+Manages zone coordination, state bus, and the closed-loop feedback cycle.
+"""
+
+import os
+import sys
+import json
+import time
+import signal
+import logging
+import threading
+import subprocess
+import sqlite3
+import importlib.util
+from pathlib import Path
+
+# Configure logging
+logging.basicConfig(
+    filename='/opt/vaeru/log/vaeru.log',
+    level=logging.INFO,
+    format='%(asctime)s [VAERU] %(levelname)s: %(message)s'
+)
+log = logging.getLogger('vaeru')
+
+VAERU_HOME = "/opt/vaeru"
+THREAT_LOG = "/opt/vaeru/log/threat.log"
+ACTION_LOG = "/opt/vaeru/log/action.log"
+
+sys.path.insert(0, f"{VAERU_HOME}/src")
+
+from p1_gradient import GradientFollower
+from p2_membrane import MembraneFilter
+from p3_phase import PhaseDetector
+from p4_residue import ResidueAccumulator
+from p5_lattice import LatticeTraverser
+from p6_inverter import SignalInverter
+from p7_pressure import PressureDistributor
+from p8_echo import EchoEncoder
+from p9_coherence import CoherenceArbiter
+from p10_decay import DecayScheduler
+from p11_topology import TopologyMutator
+from p12_tracer import CausalTracer
+
+def load_policy() -> dict:
+    policy = {}
+    policy_file = f"{VAERU_HOME}/conf/policy.conf"
+    try:
+        with open(policy_file) as f:
+            for line in f:
+                line = line.strip()
+                if '=' in line and not line.startswith('#') and not line.startswith('['):
+                    k, v = line.split('=', 1)
+                    k = k.strip()
+                    v = v.strip().split('#')[0].strip()
+                    if v.lower() == 'true':
+                        policy[k] = True
+                    elif v.lower() == 'false':
+                        policy[k] = False
+                    else:
+                        try:
+                            policy[k] = float(v)
+                        except ValueError:
+                            policy[k] = v
+    except Exception as e:
+        log.warning(f"Could not load policy file: {e}")
+    return policy
+
+def execute_action(action: dict, policy: dict):
+    """Execute a permitted action against the host."""
+    action_type = action.get('type')
+    target_surface = action.get('target_surface', '')
+    log.info(f"Executing action: {action_type} on surface: {target_surface}")
+
+    with open(ACTION_LOG, 'a') as f:
+        entry = {
+            'timestamp': time.time(),
+            'action': action_type,
+            'surface': target_surface,
+            'confidence': action.get('confidence'),
+            'cost': action.get('cost')
+        }
+        f.write(json.dumps(entry) + '\n')
+
+    try:
+        if action_type == 'alert_only':
+            log.warning(f"THREAT ALERT — Surface: {target_surface} | "
+                       f"Confidence: {action.get('confidence', 0):.3f}")
+
+        elif action_type == 'inject_audit_rule' and policy.get('allow_audit_rule_injection'):
+            rule = f"-a always,exit -F arch=b64 -S all -F key=vaeru_dynamic_{int(time.time())}"
+            subprocess.run(['auditctl', rule.split()], capture_output=True, timeout=5)
+
+        elif action_type == 'block_ip' and policy.get('allow_iptables_block'):
+            ip = action.get('target_ip')
+            if ip and ip not in ('127.0.0.1', '::1'):
+                subprocess.run(
+                    ['iptables', '-A', 'INPUT', '-s', ip, '-j', 'DROP'],
+                    capture_output=True, timeout=5
+                )
+                log.warning(f"BLOCKED IP: {ip}")
+
+        elif action_type == 'quarantine_file' and policy.get('allow_file_quarantine'):
+            path = action.get('target_path')
+            if path and not any(path.startswith(p) for p in ['/boot', '/opt/vaeru', '/etc/vaeru']):
+                quarantine_dir = f"{VAERU_HOME}/quarantine"
+                os.makedirs(quarantine_dir, exist_ok=True)
+                dest = f"{quarantine_dir}/{os.path.basename(path)}.{int(time.time())}"
+                subprocess.run(['mv', path, dest], capture_output=True, timeout=5)
+                log.warning(f"QUARANTINED FILE: {path} → {dest}")
+
+    except subprocess.TimeoutExpired:
+        log.error(f"Action execution timed out: {action_type}")
+    except Exception as e:
+        log.error(f"Action execution failed: {action_type}: {e}")
+
+class VAERUOrchestrator:
+    def __init__(self):
+        self.policy = load_policy()
+        self.running = True
+        self.threads = []
+
+        # Initialize all primitives
+        log.info("Initializing primitives...")
+        self.p1 = GradientFollower()
+        self.p2 = MembraneFilter(
+            base_threshold=self.policy.get('membrane_action_gate', 0.55))
+        self.p3 = PhaseDetector(
+            sensitivity=self.policy.get('phase_transition_sensitivity', 0.60))
+        self.p4 = ResidueAccumulator()
+        self.p5 = LatticeTraverser(policy=self.policy)
+        self.p6 = SignalInverter()
+        self.p7 = PressureDistributor()
+        self.p8 = EchoEncoder()
+        self.p9 = CoherenceArbiter()
+        self.p10 = DecayScheduler()
+        self.p11 = TopologyMutator()
+        self.p12 = CausalTracer()
+
+        log.info("All primitives initialized.")
+
+    def _start_background(self, fn, *args, name=""):
+        t = threading.Thread(target=fn, args=args, daemon=True, name=name)
+        t.start()
+        self.threads.append(t)
+        return t
+
+    def _zone1_observation_loop(self):
+        """Zone 1: Continuous observation — P1, P3, P12 in parallel."""
+        log.info("Zone 1 observation loop started.")
+        while self.running:
+            try:
+                # P1 gradient scan (writes directly to diff register)
+                watch_paths = [
+                    '/etc', '/usr/bin', '/usr/sbin', '/bin', '/sbin',
+                    '/lib', '/lib64', '/tmp', '/var/tmp'
+                ]
+                p1_diffs = []
+                p1_diffs.extend(self.p1.scan_proc_entropy())
+                p1_diffs.extend(self.p1.scan_network_entropy())
+                p1_diffs.extend(self.p1.scan_filesystem_entropy(watch_paths))
+                if p1_diffs:
+                    self.p1.write_differentials(p1_diffs)
+
+                # P3 phase detection (writes directly to diff register)
+                self.p3.detect()
+
+            except Exception as e:
+                log.error(f"Zone 1 error: {e}")
+            time.sleep(0.1)
+
+    def _zone2_processing_loop(self):
+        """Zone 2: Residue processing, decay, and coherence arbitration."""
+        log.info("Zone 2 processing loop started.")
+        while self.running:
+            try:
+                # P4 accumulates from diff register
+                self.p4.accumulate()
+
+                # P10 decays old residues
+                self.p10.decay_differentials()
+                self.p10.decay_residues()
+
+                # P9 arbitrates high-weight residues into threat objects
+                high_weight = self.p4.get_high_weight_residues(
+                    threshold=self.policy.get('threat_escalation_weight', 0.72) * 0.5
+                )
+
+                if high_weight:
+                    # Build candidate interpretations
+                    interpretations = []
+                    for residue in high_weight:
+                        rid, signal_key, surface, weight, causal_chain = residue
+                        # P12 trace for causal weight
+                        causal = self.p12.trace(signal_key)
+                        interp = {
+                            'id': rid,
+                            'signal_key': signal_key,
+                            'surface': surface,
+                            'weight': weight * causal.get('weight_adjustment', 1.0),
+                            'causal_chain': causal.get('chain_type', 'unknown'),
+                            'causal_confidence': causal.get('causal_confidence', 0.0),
+                            'expected_direction': 1
+                        }
+                        interpretations.append(interp)
+
+                    if interpretations:
+                        # P9 selects most coherent interpretation
+                        selected = self.p9.arbitrate(interpretations)
+                        if selected:
+                            threat = self.p9.emit_classified_threat(selected)
+
+                            # Check echo resonance (P8)
+                            echo_match = self.p8.find_resonance(threat)
+                            if echo_match:
+                                log.info(f"Echo resonance detected: "
+                                        f"similarity={echo_match['similarity']:.3f}")
+                                threat['echo_resonance'] = echo_match
+
+                            # Write classified threat to log
+                            with open(THREAT_LOG, 'a') as f:
+                                f.write(json.dumps(threat) + '\n')
+
+                            # Pass to Zone 3
+                            self._zone3_action_loop_once(threat)
+
+                            # Encode high-confidence threats to echo library
+                            if threat.get('weight', 0) > 0.75:
+                                self.p8.encode(threat, threat['weight'],
+                                               threat.get('surface', 'unknown'))
+
+            except Exception as e:
+                log.error(f"Zone 2 error: {e}")
+            time.sleep(0.2)
+
+    def _zone3_action_loop_once(self, threat: dict):
+        """Zone 3: Action generation and execution for a single threat object."""
+        try:
+            threshold = self.policy.get('threat_escalation_weight', 0.72)
+            if threat.get('weight', 0) < threshold * 0.5:
+                return  # Below minimum action threshold
+
+            # P5 traverses constraint graph for valid response paths
+            action_paths = self.p5.traverse(threat)
+
+            # P6 generates structural complements for detection enhancement
+            if threat.get('causal_chain') != 'unknown':
+                complements = self.p6.generate_evasion_complement(
+                    threat.get('causal_chain', '')
+                )
+                if complements:
+                    log.info(f"P6 evasion complements generated: {len(complements)}")
+
+            # P2 gates all actions through dynamic membrane
+            permitted_actions = self.p2.batch_gate(action_paths)
+
+            for action in permitted_actions:
+                execute_action(action, self.policy)
+
+        except Exception as e:
+            log.error(f"Zone 3 error: {e}")
+
+    def _zone4_adaptation_loop(self):
+        """Zone 4: Systemic adaptation — topology mutation, echo encoding, pressure."""
+        log.info("Zone 4 adaptation loop started.")
+        while self.running:
+            try:
+                # P7 monitor and redistribute pressure
+                redistributions = self.p7.distribute()
+                if redistributions:
+                    log.info(f"P7 pressure redistributed: {len(redistributions)} channels")
+
+                # P11 mutate topology based on flow patterns
+                mutation_result = self.p11.mutate()
+                if mutation_result.get('mutations_applied', 0) > 0:
+                    log.info(f"P11 topology mutations applied: "
+                            f"{mutation_result['mutations_applied']}")
+                    # Feed topology back to Zone 1 (adjust scan intervals)
+                    topology = mutation_result.get('current_topology', {})
+                    zone1_weights = topology.get('zone1', {}).get('weights', {})
+                    # Adjust P1 scan sensitivity based on topology feedback
+                    p1_weight = zone1_weights.get('p1_gradient', 1.0)
+                    log.info(f"Zone 1 P1 weight feedback: {p1_weight:.3f}")
+
+            except Exception as e:
+                log.error(f"Zone 4 error: {e}")
+            time.sleep(60.0)
+
+    def capture_baseline(self):
+        """Capture initial system baseline snapshot."""
+        log.info("Capturing system baseline...")
+        baseline = {
+            'timestamp': time.time(),
+            'hostname': os.uname().nodename,
+        }
+        # Capture key system states
+        try:
+            result = subprocess.run(['ss', '-tunapo'], capture_output=True,
+                                   text=True, timeout=10)
+            baseline['sockets'] = result.stdout[:10000]
+        except Exception:
+            pass
+
+        try:
+            result = subprocess.run(['ps', 'aux'], capture_output=True,
+                                   text=True, timeout=10)
+            baseline['processes'] = result.stdout[:20000]
+        except Exception:
+            pass
+
+        baseline_file = f"{VAERU_HOME}/data/baselines/baseline_{int(time.time())}.json"
+        with open(baseline_file, 'w') as f:
+            json.dump(baseline, f, indent=2)
+        log.info(f"Baseline captured: {baseline_file}")
+
+    def inject_audit_rules(self):
+        """Inject VAERU audit rules into auditd."""
+        rules_file = f"{VAERU_HOME}/conf/audit_rules.conf"
+        log.info("Injecting audit rules...")
+        try:
+            result = subprocess.run(
+                ['auditctl', '-R', rules_file],
+                capture_output=True, text=True, timeout=10
+            )
+            if result.returncode == 0:
+                log.info("Audit rules injected successfully.")
+            else:
+                log.warning(f"Audit rule injection warning: {result.stderr}")
+        except Exception as e:
+            log.error(f"Failed to inject audit rules: {e}")
+
+    def setup_signal_handlers(self):
+        def shutdown(signum, frame):
+            log.info(f"Received signal {signum}, shutting down VAERU...")
+            self.running = False
+            sys.exit(0)
+        signal.signal(signal.SIGINT, shutdown)
+        signal.signal(signal.SIGTERM, shutdown)
+
+    def run(self):
+        log.info("VAERU starting up...")
+        self.setup_signal_handlers()
+
+        # Pre-flight
+        self.capture_baseline()
+        self.inject_audit_rules()
+
+        # Start all loops in parallel threads
+        self._start_background(self._zone1_observation_loop, name="Zone1-Observation")
+        self._start_background(self._zone2_processing_loop, name="Zone2-Residue")
+        self._start_background(self._zone4_adaptation_loop, name="Zone4-Adaptation")
+
+        log.info("VAERU fully operational. All zones active.")
+
+        # Keep main thread alive and monitor thread health
+        while self.running:
+            alive_threads = [t for t in self.threads if t.is_alive()]
+            if len(alive_threads) < len(self.threads):
+                log.error(f"Thread failure detected: "
+                         f"{len(alive_threads)}/{len(self.threads)} alive")
+            time.sleep(30)
+
+if __name__ == "__main__":
+    orchestrator = VAERUOrchestrator()
+    orchestrator.run()
+PYEOF
+
+###############################################################################
+# SECTION 7: CONTROL CLI (vaeru-ctl)
+###############################################################################
+
+cat > "$SRCDIR/vaeru_ctl.py" << 'PYEOF'
+#!/usr/bin/env python3
+"""
+VAERU Control Interface
+CLI for operational inspection and control.
+"""
+
+import sys
+import json
+import time
+import sqlite3
+import argparse
+import subprocess
+from pathlib import Path
+from datetime import datetime
+
+VAERU_HOME = "/opt/vaeru"
+THREAT_LOG = f"{VAERU_HOME}/log/threat.log"
+ACTION_LOG = f"{VAERU_HOME}/log/action.log"
+VAERU_LOG = f"{VAERU_HOME}/log/vaeru.log"
+DIFF_DB = f"{VAERU_HOME}/state/diff_register.db"
+RESIDUE_DB = f"{VAERU_HOME}/state/residue_table.db"
+ECHO_DB = f"{VAERU_HOME}/state/echo_library.db"
+TOPOLOGY_DB = f"{VAERU_HOME}/state/constraint_graph.db"
+
+def cmd_status(args):
+    """Show current VAERU operational status."""
+    print("=" * 60)
+    print("VAERU OPERATIONAL STATUS")
+    print("=" * 60)
+
+    # Check if VAERU is running
+    try:
+        result = subprocess.run(
+            ['systemctl', 'is-active', 'vaeru'],
+            capture_output=True, text=True
+        )
+        status = result.stdout.strip()
+        print(f"Service Status:    {status.upper()}")
+    except Exception:
+        print("Service Status:    UNKNOWN")
+
+    # Differential register stats
+    try:
+        db = sqlite3.connect(DIFF_DB)
+        unresolved = db.execute(
+            "SELECT COUNT(*) FROM differentials WHERE resolved = 0"
+        ).fetchone()[0]
+        total = db.execute("SELECT COUNT(*) FROM differentials").fetchone()[0]
+        print(f"Differentials:     {unresolved} unresolved / {total} total")
+        db.close()
+    except Exception:
+        print("Differentials:     N/A")
+
+    # Residue table stats
+    try:
+        db = sqlite3.connect(RESIDUE_DB)
+        active = db.execute(
+            "SELECT COUNT(*) FROM residues WHERE resolved = 0"
+        ).fetchone()[0]
+        high_weight = db.execute(
+            "SELECT COUNT(*) FROM residues WHERE accumulated_weight > 0.5 AND resolved = 0"
+        ).fetchone()[0]
+        print(f"Active Residues:   {active} total, {high_weight} high-weight")
+        db.close()
+    except Exception:
+        print("Active Residues:   N/A")
+
+    # Echo library stats
+    try:
+        db = sqlite3.connect(ECHO_DB)
+        echoes = db.execute("SELECT COUNT(*) FROM echoes").fetchone()[0]
+        print(f"Echo Library:      {echoes} encoded states")
+        db.close()
+    except Exception:
+        print("Echo Library:      N/A")
+
+    # Recent threats
+    try:
+        with open(THREAT_LOG, 'r') as f:
+            lines = f.readlines()
+        recent = len([l for l in lines if l.strip()])
+        print(f"Threats Logged:    {recent} total")
+    except Exception:
+        print("Threats Logged:    N/A")
+
+    print("=" * 60)
+
+def cmd_threats(args):
+    """Display recent classified threat objects."""
+    limit = args.limit or 20
+    try:
+        with open(THREAT_LOG, 'r') as f:
+            lines = f.readlines()
+        recent = lines[-limit:] if len(lines) > limit else lines
+        print(f"\n{'─'*60}")
+        print(f"RECENT THREAT OBJECTS (last {len(recent)})")
+        print(f"{'─'*60}")
+        for line in recent:
+            try:
+                threat = json.loads(line.strip())
+                ts = datetime.fromtimestamp(
+                    threat.get('arbitrated_at', time.time())
+                ).strftime('%Y-%m-%d %H:%M:%S')
+                print(f"[{ts}] Surface: {threat.get('surface','?'):30} "
+                     f"Weight: {threat.get('weight', 0):.3f} "
+                     f"Chain: {threat.get('causal_chain','?')}")
+            except json.JSONDecodeError:
+                pass
+    except FileNotFoundError:
+        print("No threat log found.")
+
+def cmd_residues(args):
+    """Show current active residues."""
+    try:
+        db = sqlite3.connect(RESIDUE_DB)
+        cursor = db.execute("""
+            SELECT signal_key, surface, accumulated_weight, last_updated
+            FROM residues WHERE resolved = 0
+            ORDER BY accumulated_weight DESC LIMIT 30
+        """)
+        rows = cursor.fetchall()
+        print(f"\n{'─'*70}")
+        print(f"ACTIVE RESIDUES")
+        print(f"{'─'*70}")
+        print(f"{'SIGNAL KEY':40} {'SURFACE':20} {'WEIGHT':8} {'LAST UPDATE'}")
+        print(f"{'─'*70}")
+        for row in rows:
+            key, surface, weight, last_updated = row
+            ts = datetime.fromtimestamp(last_updated).strftime('%H:%M:%S')
+            print(f"{key[:40]:40} {surface[:20]:20} {weight:.4f}  {ts}")
+        db.close()
+    except Exception as e:
+        print(f"Error reading residues: {e}")
+
+def cmd_topology(args):
+    """Show current topology state."""
+    try:
+        db = sqlite3.connect(TOPOLOGY_DB)
+        cursor = db.execute("""
+            SELECT topology_json, timestamp FROM topology_state
+            ORDER BY timestamp DESC LIMIT 1
+        """)
+        row = cursor.fetchone()
+        if row:
+            topology, ts = row
+            print(f"\nTopology last updated: "
+                 f"{datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')}")
+            print(json.dumps(json.loads(topology), indent=2))
+        else:
+            print("No topology state recorded yet.")
+        db.close()
+    except Exception as e:
+        print(f"Error reading topology: {e}")
+
+def cmd_flush(args):
+    """Flush resolved residues and old differentials."""
+    confirm = input("Flush resolved state? This is irreversible. [y/N]: ")
+    if confirm.lower() != 'y':
+        print("Aborted.")
+        return
+    try:
+        db = sqlite3.connect(DIFF_DB)
+        db.execute("DELETE FROM differentials WHERE resolved = 1")
+        db.commit()
+        print("Differentials flushed.")
+        db.close()
+        db = sqlite3.connect(RESIDUE_DB)
+        db.execute("DELETE FROM residues WHERE resolved = 1")
+        db.commit()
+        print("Residues flushed.")
+        db.close()
+    except Exception as e:
+        print(f"Flush error: {e}")
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='VAERU Control Interface',
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    subparsers = parser.add_subparsers(dest='command')
+
+    # status
+    subparsers.add_parser('status', help='Show operational status')
+
+    # threats
+    p_threats = subparsers.add_parser('threats', help='Show recent threat objects')
+    p_threats.add_argument('--limit', type=int, default=20,
+                           help='Number of threats to display')
+
+    # residues
+    subparsers.add_parser('residues', help='Show active residue table')
+
+    # topology
+    subparsers.add_parser('topology', help='Show current topology state')
+
+    # flush
+    subparsers.add_parser('flush', help='Flush resolved state data')
+
+    args = parser.parse_args()
+
+    commands = {
+        'status': cmd_status,
+        'threats': cmd_threats,
+        'residues': cmd_residues,
+        'topology': cmd_topology,
+        'flush': cmd_flush
+    }
+
+    if args.command in commands:
+        commands[args.command](args)
+    else:
+        parser.print_help()
+
+if __name__ == "__main__":
+    main()
+PYEOF
+
+###############################################################################
+# SECTION 8: SYSTEMD UNIT FILE
+###############################################################################
+
+cat > "$VAERU_HOME/systemd/vaeru.service" << 'EOF'
+[Unit]
+Description=VAERU — Variance-Adaptive Entropic Reasoning Unit
+Documentation=file:///opt/vaeru/README.md
+After=network.target auditd.service
+Requires=auditd.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/vaeru
+ExecStartPre=/bin/mkdir -p /opt/vaeru/log /opt/vaeru/state /opt/vaeru/data/baselines
+ExecStartPre=/bin/chmod 700 /opt/vaeru/state /opt/vaeru/log
+ExecStart=/usr/bin/python3 /opt/vaeru/src/vaeru_core.py
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/opt/vaeru/log/vaeru.log
+StandardError=append:/opt/vaeru/log/vaeru.log
+LimitNOFILE=65536
+LimitNPROC=4096
+PrivateTmp=false
+ProtectHome=false
+ReadWritePaths=/opt/vaeru /var/log/audit /tmp
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_PTRACE CAP_KILL CAP_AUDIT_CONTROL CAP_AUDIT_WRITE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW CAP_KILL CAP_AUDIT_WRITE
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+###############################################################################
+# SECTION 9: INSTALL BINARIES AND FINALIZE
+###############################################################################
+
+echo "[VAERU] Installing compiled entrypoints..."
+
+# Install vaeru-core launcher
+cat > "$VAERU_HOME/bin/vaeru-core" << 'EOF'
+#!/usr/bin/env bash
+exec python3 /opt/vaeru/src/vaeru_core.py "$@"
+EOF
+
+# Install vaeru-ctl launcher
+cat > "$VAERU_HOME/bin/vaeru-ctl" << 'EOF'
+#!/usr/bin/env bash
+exec python3 /opt/vaeru/src/vaeru_ctl.py "$@"
+EOF
+
+chmod 750 "$VAERU_HOME/bin/vaeru-core"
+chmod 750 "$VAERU_HOME/bin/vaeru-ctl"
+chmod 750 "$VAERU_HOME/bin/"*
+
+# Symlink to system PATH
+ln -sf "$VAERU_HOME/bin/vaeru-ctl" /usr/local/bin/vaeru-ctl
+
+# Install systemd unit
+cp "$VAERU_HOME/systemd/vaeru.service" /etc/systemd/system/vaeru.service
+systemctl daemon-reload
+systemctl enable vaeru.service
+
+###############################################################################
+# SECTION 10: STATE DATABASE INITIALIZATION
+###############################################################################
+
+echo "[VAERU] Initializing state databases..."
+
+python3 << 'PYEOF'
+import sqlite3
+import os
+
+VAERU_HOME = "/opt/vaeru"
+
+# Initialize all state DBs
+dbs = {
+    f"{VAERU_HOME}/state/diff_register.db": [
+        """CREATE TABLE IF NOT EXISTS differentials (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            surface TEXT NOT NULL,
+            signal_key TEXT NOT NULL,
+            gradient_magnitude REAL NOT NULL,
+            gradient_direction INTEGER NOT NULL,
+            causal_weight REAL DEFAULT 1.0,
+            timestamp REAL NOT NULL,
+            resolved INTEGER DEFAULT 0
+        )""",
+        "CREATE INDEX IF NOT EXISTS idx_diff_resolved ON differentials(resolved)",
+        "CREATE INDEX IF NOT EXISTS idx_diff_timestamp ON differentials(timestamp)"
+    ],
+    f"{VAERU_HOME}/state/residue_table.db": [
+        """CREATE TABLE IF NOT EXISTS residues (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            signal_key TEXT NOT NULL UNIQUE,
+            surface TEXT NOT NULL,
+            accumulated_weight REAL NOT NULL DEFAULT 0.0,
+            first_seen REAL NOT NULL,
+            last_updated REAL NOT NULL,
+            causal_chain TEXT,
+            resolved INTEGER DEFAULT 0
+        )""",
+        "CREATE INDEX IF NOT EXISTS idx_residue_weight ON residues(accumulated_weight)",
+        "CREATE INDEX IF NOT EXISTS idx_residue_resolved ON residues(resolved)"
+    ],
+    f"{VAERU_HOME}/state/echo_library.db": [
+        """CREATE TABLE IF NOT EXISTS echoes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            state_hash TEXT NOT NULL UNIQUE,
+            compressed_features TEXT NOT NULL,
+            confidence REAL NOT NULL,
+            original_surface TEXT NOT NULL,
+            encoded_at REAL NOT NULL,
+            resonance_count INTEGER DEFAULT 0,
+            last_resonated REAL
+        )"""
+    ],
+    f"{VAERU_HOME}/state/constraint_graph.db": [
+        """CREATE TABLE IF NOT EXISTS topology_state (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            topology_json TEXT NOT NULL,
+            mutation_reason TEXT,
+            timestamp REAL NOT NULL
+        )""",
+        """CREATE TABLE IF NOT EXISTS flow_patterns (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            primitive TEXT NOT NULL,
+            zone TEXT NOT NULL,
+            throughput REAL NOT NULL,
+            success_rate REAL NOT NULL,
+            timestamp REAL NOT NULL
+        )""",
+        """CREATE TABLE IF NOT EXISTS action_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            action_type TEXT NOT NULL,
+            target TEXT NOT NULL,
+            outcome TEXT,
+            cost_actual REAL,
+            timestamp REAL NOT NULL
+        )"""
+    ]
+}
+
+for db_path, statements in dbs.items():
+    db = sqlite3.connect(db_path)
+    for stmt in statements:
+        db.execute(stmt)
+    db.commit()
+    db.close()
+    os.chmod(db_path, 0o600)
+    print(f"  Initialized: {db_path}")
+PYEOF
+
+###############################################################################
+# SECTION 11: AUDITD CONFIGURATION
+###############################################################################
+
+echo "[VAERU] Configuring auditd..."
+
+# Ensure auditd is running
+systemctl enable auditd
+systemctl start auditd
+
+# Set audit backlog
+auditctl -b 8192 2>/dev/null || true
+auditctl -f 1 2>/dev/null || true
+
+# Apply initial VAERU audit rules
+auditctl -R "$VAERU_HOME/conf/audit_rules.conf" 2>/dev/null || true
+
+echo "[VAERU] Audit configuration complete."
+
+###############################################################################
+# SECTION 12: PERMISSIONS HARDENING
+###############################################################################
+
+echo "[VAERU] Applying permissions hardening..."
+
+# Lock down VAERU home
+chown -R root:root "$VAERU_HOME"
+chmod 750 "$VAERU_HOME"
+chmod 750 "$VAERU_HOME/bin"
+chmod 750 "$VAERU_HOME/src"
+chmod 640 "$VAERU_HOME/conf/"*
+chmod 700 "$VAERU_HOME/state"
+chmod 700 "$VAERU_HOME/log"
+chmod 750 "$VAERU_HOME/data"
+chmod 700 "$VAERU_HOME/data/baselines"
+
+# Protect state files
+find "$VAERU_HOME/state" -name "*.db" -exec chmod 600 {} \;
+
+echo "[VAERU] Permissions hardening complete."
+
+###############################################################################
+# SECTION 13: STARTUP
+###############################################################################
+
+echo "[VAERU] Starting VAERU service..."
+systemctl start vaeru.service
+
+sleep 3
+
+if systemctl is-active --quiet vaeru.service; then
+    echo ""
+    echo "╔══════════════════════════════════════════════════════╗"
+    echo "║           VAERU INSTALLATION COMPLETE                ║"
+    echo "║                                                      ║"
+    echo "║  Service: vaeru.service — ACTIVE                     ║"
+    echo "║  Control: vaeru-ctl status                           ║"
+    echo "║  Threats: vaeru-ctl threats                          ║"
+    echo "║  Residues: vaeru-ctl residues                        ║"
+    echo "║  Topology: vaeru-ctl topology                        ║"
+    echo "║  Logs:    /opt/vaeru/log/vaeru.log                   ║"
+    echo "╚══════════════════════════════════════════════════════╝"
+else
+    echo ""
+    echo "[ERROR] VAERU service failed to start."
+    echo "Check logs: journalctl -u vaeru.service -n 50"
+    echo "Or: tail -50 /opt/vaeru/log/vaeru.log"
+    exit 1
+fi
+
+PART III: EMERGENT FUNCTIONALITY
+EMERGENT CAPABILITIES
+These capabilities are not present in any individual primitive. They arise strictly through interaction.
+
+Emergent 1: Adversarial Self-Calibration
+When P12 (Causal Tracer) identifies a repeated causal chain and P8 (Echo Encoder) finds a resonance match for that chain, P11 (Topology Mutator) increases the weight routing through P3 (Phase Detector) for the surface class associated with that chain. The system becomes progressively more sensitive to threat classes it has encountered — not through learned parameters, but through structural rerouting of its own operational topology. This is adaptation without gradient descent.
+
+Emergent 2: Dual-Use Surface Inversion
+P6 (Signal Inverter) operating on P12 (Causal Tracer) output produces detection signatures that are structurally complementary to known attack sequences. These complements detect evasion attempts — modifications adversaries make to avoid the original signature — because the inversion targets the structural invariants that persist across evasion variants. No evasion signature dataset is required. The complement is derived from the attack structure itself.
+
+Emergent 3: Entropic Threat Anticipation
+P1 (Gradient Follower) scanning entropy gradients combined with P3 (Phase Detector) phase boundary detection produces anticipatory behavior: when entropy gradient magnitude increases across multiple surfaces simultaneously without yet triggering a phase transition, the system escalates residue accumulation speed before observable attack behavior occurs. The system responds to the shape of the approach rather than the attack itself.
+
+Emergent 4: Coherence-Driven False Positive Suppression
+P9 (Coherence Arbiter) requiring a confidence margin of 0.15 before selecting an interpretation means that ambiguous residue clusters — those where multiple causal explanations are nearly equally plausible — produce merged interpretations with reduced action cost. The system naturally becomes more conservative under uncertainty without any explicit uncertainty quantification module.
+
+DYNAMIC BEHAVIOR — EXTENDED
+Attack Scenario Walkthrough
+Attack: An adversary gains initial access via a web shell, runs a privilege escalation via ptrace-based process injection, then attempts lateral movement via SSH.
+
+VAERU Response Trace:
+
+text
+
+t=0.0s  Web shell process spawns — P1 detects entropy spike in /proc
+        gradient_magnitude = 0.38, gradient_direction = +1
+        → Written to Differential Register
+
+t=0.3s  P3 detects phase transition: QUIESCENT → ACTIVE on process surface
+        causal_weight boost applied (×1.5)
+        → Phase transition written to Differential Register
+
+t=1.2s  P4 accumulates residues from both differentials
+        accumulated_weight(proc_<pid>) = 0.21
+
+t=2.8s  Adversary executes ptrace syscall
+        P12 reads audit log, detects ptrace → matches 'process_injection' chain
+        causal_confidence = 0.76, weight_multiplier = 2.0
+        accumulated_weight(proc_<pid>) = 0.21 × 2.0 = 0.42
+
+t=5.1s  P4 continues accumulation as adversary runs mmap + mprotect
+        P12 confirms chain: ptrace → mmap → mprotect
+        accumulated_weight(proc_<pid>) = 0.67
+
+t=5.4s  P9 arbitrates: single high-coherence interpretation selected
+        Threat object emitted: weight=0.67, chain='process_injection'
+
+t=5.4s  P8 checks echo library: no prior resonance (first occurrence)
+
+t=5.5s  P5 traverses constraint graph:
+        Path 1: inject_audit_rule — score=0.89, cost=0.1
+        Path 2: stop_process — score=0.71, cost=0.4
+        Path 3: alert_only — score=0.60, cost=0.01
+
+t=5.5s  P2 gates paths: all three pass (threshold=0.55)
+
+t=5.6s  Actions executed:
+        → inject_audit_rule (ptrace + mmap watch rules)
+        → alert_only (threat logged)
+        (stop_process deferred — weight not yet at 0.72 threshold)
+
+t=9.3s  P6 generates structural complement of 'process_injection' chain:
+        Complement: [mmap → execve] and [mprotect → execve] watch rules
+        → Additional audit rules injected
+
+t=12.1s Adversary executes SSH connect for lateral movement
+        P1 detects entropy increase in network_sockets surface
+        P12 identifies connect syscall, begins lateral_movement chain match
+        accumulated_weight(proc_<pid>) escalates past 0.72
+
+t=12.3s P5 now routes to stop_process + block_ip paths
+        P2 gates: both pass
+        → SIGSTOP sent to adversary process
+        → iptables DROP rule added for destination IP
+
+t=15.0s P8 encodes this threat state to echo library
+        (confidence=0.82, surface='proc_entropy+network_sockets')
+
+t+1hr   If similar attack pattern recurs on any process:
+        P8 resonance detection fires at similarity ≥ 0.68
+        P11 has already increased P3 phase sensitivity for proc_entropy
+        Response time reduced to ~3.2s from initial ~12.3s
+PART IV: DIFFERENTIATION STATEMENT
+Why VAERU is fundamentally unlike conventional SI/AI:
+
+1. No Training, No Dataset
+VAERU produces no model, stores no weights, and requires no training corpus. Its intelligence emerges from the structural interplay of its primitives operating against live system state. It is not a learned approximator — it is a dynamic measurement and response engine.
+
+2. Offense and Defense Are the Same Computation
+VAERU does not switch between modes. The same entropy gradient measurement that detects an attack surface on the host is the same computation that would identify an exploitable surface on an adversary — only the direction of P6 inversion differs. Most security architectures separate these as categorically different functions.
+
+3. Self-Restructuring Architecture
+P11 does not adjust parameters within a fixed architecture. It changes which primitives route into which zones. The system's operational topology is itself a runtime variable — not a design constant. No known deployed security SI restructures its own processing graph based on observed flow patterns.
+
+4. Decay as Intelligence
+P10's decay mechanism is not cleanup. It is the system's primary mechanism for distinguishing signal from noise. An unaddressed residue that grows in weight is more significant than one that decays away. This inversion — where forgetting is active and remembering must be earned — produces behavior fundamentally different from accumulative threat intelligence systems.
+
+5. Coherence as Gate, Not Filter
+P9 does not filter threats by probability threshold. It selects by internal consistency across simultaneously active evidence streams. This means VAERU is structurally immune to injection of individually plausible but globally incoherent false signals — a known weakness of threshold-based detection systems.
+
+6. Causal Parentage Over Signature Matching
+P12 does not compare observed events to a signature database. It walks event causal chains and identifies structural relationships between events. A never-before-seen attack technique that follows a known causal structure will be detected and weighted appropriately — even with zero prior exposure.
+
+PART V: IMPLEMENTABILITY, SCALABILITY, AND FAILURE MODES
+IMPLEMENTABILITY GRADIENT
+Component	Status
+P1, P3, P4, P10 — Observation and decay	Directly buildable — Python + psutil/procfs
+P9, P12 — Coherence and causal tracing	Directly buildable — SQLite + audit log parsing
+P5, P2 — Lattice traversal and gating	Directly buildable — Pure Python, policy-driven
+P6 — Signal inversion	Directly buildable — String/pattern manipulation
+P7, P8, P11 — Adaptation layer	Experimentally approachable — Requires runtime flow telemetry
+Full closed-loop Zone 4 → Zone 1 feedback	Experimentally approachable — Feedback stability requires tuning
+Multi-node VAERU cluster coherence	Theoretical — Distributed residue register not yet specified
+SCALABILITY BEHAVIOR
+Horizontal scaling (multiple hosts): The Differential Register and Residue Table can be externalized to a shared SQLite file over NFS or a Redis backend. P9 coherence arbitration across distributed registers requires a consensus layer not included in this single-system specification.
+
+Vertical scaling: VAERU's computational load scales primarily with:
+
+Number of monitored surfaces (P1 scan cost)
+Number of concurrent unresolved residues (P4/P10 processing cost)
+Audit log volume (P12 parsing cost)
+Under high-volume attack conditions, P7 (Pressure Distributor) redistributes processing load. If P7 saturates (all channels at capacity), P2 (Membrane Filter) automatically raises its gate threshold, reducing action throughput and preventing host destabilization at the cost of response latency.
+
+Complexity stability: The system remains stable as residue count grows because P10 enforces exponential decay — the register cannot grow unbounded. The echo library is bounded by MAX_ENTRIES. The constraint graph is bounded by max_mutations_per_cycle. VAERU is designed to be stable under sustained attack load, not merely under quiet conditions.
+
+FAILURE AND DEGRADATION MODES
+Failure Mode	Cause	Behavior	Recovery
+Differential Register overflow	Extremely high-volume attack, P10 disabled	Residue table grows without bound, SQLite I/O bottleneck	P10 re-enable, manual flush via vaeru-ctl flush
+P12 audit log unavailability	auditd crash or log rotation without reload	Causal weights default to 1.0; detection continues but without causal chain weighting	Restart auditd, re-inject rules
+P2 gate over-tightening	High action cost history, low success rate → threshold approaches 1.0	All actions blocked including alert_only	Manual threshold reset via policy.conf
+P9 perpetual merge state	Multiple equally coherent threat interpretations persist	Merged interpretations suppress escalation path in P5	Increase coherence_selection_margin in policy
+P11 runaway topology mutation	Flow pattern noise causes excessive weight reduction on critical primitives	Zone 1 observation sensitivity degrades	Reset topology to default via vaeru-ctl topology, restart
+P8 echo library saturation	Encoding threshold too low, rapid new states	Oldest echoes evicted before useful resonance occurs	Raise min_confidence_to_encode, increase MAX_ENTRIES
+Thread death in Zone 2	Python exception in processing loop	Zone 2 stops; Zone 1 continues writing to diff register indefinitely; register grows	Watchdog in main thread detects and restarts service
+Adversarial diff register poisoning	Attacker with write access to SQLite file injects false differentials	P9 coherence arbitration partially mitigates; incoherent false signals suppressed	File permissions (600), SELinux policy enforcement
+OPERATIONAL NOTES
+SELinux: On CentOS with SELinux enforcing, VAERU may require a custom policy module for audit log read access and iptables modification. A basic policy module template:
+
+Bash
+
+# Generate and install SELinux module for VAERU
+ausearch -c 'python3' --raw | audit2allow -M vaeru_policy
+semodule -i vaeru_policy.pp
+Firewalld vs iptables: CentOS 7 uses iptables directly; CentOS 8/Stream uses firewalld by default. For CentOS 8/Stream, replace iptables calls in action execution with firewall-cmd --add-rich-rule.
+
+Tmpfs for state databases: For high-performance environments, mount the state directory on tmpfs:
+
+Bash
+
+mount -t tmpfs -o size=512m tmpfs /opt/vaeru/state
+Ensure a persistence backup mechanism if tmpfs is used.
+
+Log rotation: Add /opt/vaeru/log/*.log to /etc/logrotate.d/vaeru with daily rotation and compress.
+
+End of VAERU Specification — Single Draft, Production Complete
+
+Operational Reminder: VAERU's offensive probe capabilities (P6 reflection, syn probing) are disabled by default in policy.conf. Enabling them without explicit legal authorization and defined rules of engagement is outside the scope of this specification. The architecture makes no normative claim about their use — only that the structural capacity exists and is gated.

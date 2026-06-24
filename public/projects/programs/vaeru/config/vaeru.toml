@@ -1,0 +1,42 @@
+# Example VAERU configuration. Copy to ./vaeru.toml or run `vaeru init`.
+
+[runtime]
+home = ".vaeru"
+tick_interval_seconds = 1.0
+log_level = "INFO"
+snapshot_limit_processes = 2048
+threat_cooldown_seconds = 20
+
+[policy]
+defensive_active = true
+offensive_probe_enabled = false
+dry_run = true
+allow_alert = true
+allow_detection_note = true
+allow_network_block = false
+allow_process_signal = false
+allow_file_quarantine = false
+allow_topology_mutation = true
+allow_echo_encoding = true
+threat_escalation_weight = 0.62
+membrane_action_gate = 0.35
+protected_process_names = ["systemd", "sshd", "vaeru"]
+protected_paths = ["/boot", "/etc", "/opt/vaeru"]
+protected_ips = ["127.0.0.1", "::1"]
+
+[decay]
+residue_half_life_seconds = 300
+prune_threshold = 0.02
+accumulation_gain = 0.50
+
+[echo]
+min_confidence_to_encode = 0.75
+resonance_trigger_threshold = 0.68
+max_entries = 1000
+
+[surfaces]
+enable_proc = true
+enable_network = true
+enable_filesystem = true
+watch_paths = ["/tmp", "/var/tmp", "/etc/cron.d", "/etc/crontab", "/etc/systemd/system"]
+common_listening_ports = [22, 25, 53, 80, 123, 443, 631, 3306, 5432, 6379, 8080]
