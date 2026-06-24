@@ -1,190 +1,74 @@
 import { useState, useEffect, useRef } from 'react';
 import { projects, projectsByCategory, categoryInfo, type Project, type ProjectCategory } from './projects';
 
-const BlackFlame = ({ className = "w-8 h-8" }: { className?: string }) => (
-  <svg viewBox="0 0 50 56" className={`${className} drop-shadow-[0_0_10px_rgba(255,255,255,0.12)]`}>
-    <defs>
-      <filter id="flame-glow">
-        <feGaussianBlur stdDeviation="1.2" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-    </defs>
-    <g filter="url(#flame-glow)">
-      <path d="M25 54 C25 54 6 30 6 18 C6 9 13 2 25 2 C37 2 44 9 44 18 C44 30 25 54 25 54 Z" fill="#1a1a1a" stroke="#444" strokeWidth="0.6" />
-      <path d="M25 48 C25 48 11 28 11 19 C11 12 17 6 25 6 C33 6 39 12 39 19 C39 28 25 48 25 48 Z" fill="#222" />
-      <path d="M25 40 C25 40 15 25 15 19 C15 14 19 10 25 10 C31 10 35 14 35 19 C35 25 25 40 25 40 Z" fill="#333" />
-      <path d="M25 32 C25 32 19 22 19 18 C19 15 22 12 25 12 C28 12 31 15 31 18 C31 22 25 32 25 32 Z" fill="#444" />
-      <path d="M25 26 C25 26 22 20 22 18 C22 16 23.5 14 25 14 C26.5 14 28 16 28 18 C28 20 25 26 25 26 Z" fill="#555" />
-    </g>
-  </svg>
-);
-
-const GothicDivider = () => (
-  <div className="flex items-center justify-center gap-4 my-12">
-    <div className="h-px w-24 bg-gradient-to-r from-transparent via-zinc-600 to-zinc-500" />
-    <BlackFlame className="w-8 h-8 fill-zinc-500" />
-    <div className="h-px w-24 bg-gradient-to-l from-transparent via-zinc-600 to-zinc-500" />
-  </div>
-);
-
-const Navigation = ({ activeSection, onNavigate }: { activeSection: string; onNavigate: (section: string) => void }) => {
-  const sections = ['home', 'about', ...Object.keys(projectsByCategory)] as const;
-
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-zinc-700/50">
-      <div className="max-w-6xl mx-auto px-6 md:px-12">
-        <div className="flex items-center justify-between h-16">
-          <button onClick={() => onNavigate('home')} className="font-bold tracking-widest text-zinc-100 text-lg cursor-pointer">
-            ARCHIVE
-          </button>
-
-          <div className="hidden md:flex items-center gap-1">
-            {sections.map((section) => (
-              <button
-                key={section}
-                onClick={() => onNavigate(section)}
-                className={`px-4 py-2 text-xs tracking-widest uppercase transition-colors cursor-pointer
-                           ${activeSection === section
-                             ? 'text-zinc-100 border-b border-zinc-500'
-                             : 'text-zinc-500 hover:text-zinc-300'}`}
-              >
-                {section === 'about' ? 'About' : categoryInfo[section as ProjectCategory]?.label || section}
-              </button>
-            ))}
-          </div>
-
-           <button className="md:hidden text-zinc-300 hover:text-zinc-100 transition-colors cursor-pointer">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </nav>
-  );
-};
-
-const Hero = () => {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0">
-        <img
-          src="/images/hero-bg.jpg"
-          alt=""
-          className="w-full h-full object-cover opacity-30"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
-      </div>
-
-      <div
-        className="absolute w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none
-                   bg-gradient-radial from-zinc-500 to-transparent transition-all duration-1000 ease-out"
-        style={{
-          left: mousePos.x - 192,
-          top: mousePos.y - 192,
-        }}
-      />
-
-      <div className="relative text-center z-10 px-6">
-        <div className="mb-8 flex justify-center animate-pulse">
-           <BlackFlame className="w-16 h-16" />
-        </div>
-        <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-white mb-4">
-          WBDEADSUN
-        </h1>
-        <p className="text-zinc-500 tracking-[0.5em] uppercase text-sm md:text-base">
-          Digital Necromancy &bull; Sonic Occultism
-        </p>
-      </div>
-
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
-        <span className="text-xs tracking-widest uppercase text-zinc-400">Scroll to Enter</span>
-      </div>
-    </section>
-  );
-};
-
-const About = () => {
-  const totalGames = projectsByCategory['games'].length;
-  const totalAI = projectsByCategory['ai'].length;
-  const totalPrograms = projectsByCategory['programs'].length;
-  const totalTracks = projectsByCategory['music'].reduce((acc, p) => acc + (p.tracks?.length || 0), 0);
-
-  return (
-    <section id="about" className="py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-black to-zinc-950">
-      <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold tracking-widest uppercase text-zinc-100 mb-8">About</h2>
-        <GothicDivider />
-        <p className="text-zinc-300 text-lg leading-relaxed mb-8">
-          I enjoy vibe coding, have been writing lyrics for 20 years, and can never seem to finish a project.
-        </p>
-        <GothicDivider />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-8">
-          {[
-            { label: "Games", value: `${totalGames}` },
-            { label: "AI Projects", value: `${totalAI}` },
-            { label: "Tracks", value: `${totalTracks}+` },
-            { label: "Programs", value: `${totalPrograms}` },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-3xl font-bold text-zinc-200 mb-2">{stat.value}</div>
-              <div className="text-xs text-zinc-500 tracking-widest uppercase">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+interface MusicTrack {
+  title: string;
+  file: string;
+  projectTitle: string;
+}
 
 interface MusicState {
-  currentTrack: { title: string; file: string; projectTitle: string } | null;
+  currentTrack: MusicTrack | null;
   isPlaying: boolean;
-  togglePlay: (track?: { title: string; file: string; projectTitle: string }) => void;
+  currentTime: number;
+  duration: number;
+  volume: number;
+  playlist: MusicTrack[];
+  togglePlay: (track?: MusicTrack, playlist?: MusicTrack[]) => void;
+  seek: (time: number) => void;
+  setVolume: (volume: number) => void;
+  nextTrack: () => void;
+  previousTrack: () => void;
 }
 
 const AudioPlayer = ({ tracks, projectTitle, musicState }: { tracks: { title: string; file: string }[], projectTitle: string, musicState: MusicState }) => {
+  const playlist: MusicTrack[] = tracks.map(t => ({ ...t, projectTitle }));
+
   return (
     <div className="space-y-1 mt-4">
       {tracks.map((track, i) => {
         const isCurrent = musicState.currentTrack?.file === track.file;
+        const trackWithProject = { ...track, projectTitle };
+
         return (
           <div
             key={i}
-            className={`flex items-center gap-3 px-3 py-2 text-sm transition-colors group
-                       ${isCurrent ? 'bg-zinc-800/50 text-zinc-200' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30'}`}
+            className={`flex items-center gap-3 px-3 py-2 text-sm transition-all duration-300 group
+                       ${isCurrent ? "bg-zinc-800/80 text-zinc-100 border-l-2 border-zinc-400" : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"}`}
           >
             <button
-              className="w-6 text-center font-mono text-xs cursor-pointer"
-              onClick={() => musicState.togglePlay({ ...track, projectTitle })}
+              className="w-6 text-center font-mono text-xs cursor-pointer hover:scale-110 transition-transform"
+              onClick={() => musicState.togglePlay(trackWithProject, playlist)}
             >
-              {isCurrent && musicState.isPlaying ? '⏸' : '▶'}
+              {isCurrent && musicState.isPlaying ? (
+                 <div className="flex items-center justify-center gap-0.5 h-3">
+                    <div className="w-0.5 bg-zinc-200 animate-music-bar-1 h-full" />
+                    <div className="w-0.5 bg-zinc-200 animate-music-bar-2 h-full" />
+                    <div className="w-0.5 bg-zinc-200 animate-music-bar-3 h-full" />
+                 </div>
+              ) : (
+                <span className="opacity-60 group-hover:opacity-100">▶</span>
+              )}
             </button>
-            <span className="flex-1 truncate cursor-pointer" onClick={() => musicState.togglePlay({ ...track, projectTitle })}>{track.title}</span>
-            <a
-              href={track.file}
-              download
-              className="opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-zinc-300 transition-opacity"
-              title="Download MP3"
+            <span
+              className="flex-1 truncate cursor-pointer font-medium tracking-tight"
+              onClick={() => musicState.togglePlay(trackWithProject, playlist)}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-            </a>
-            <span className="text-zinc-600 text-xs">MP3</span>
+              {track.title}
+            </span>
+            <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              <a
+                href={track.file}
+                download
+                className="text-zinc-600 hover:text-zinc-300 transition-colors"
+                title="Download MP3"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </a>
+              <span className="text-[10px] font-mono text-zinc-700">MP3</span>
+            </div>
           </div>
         );
       })}
@@ -195,38 +79,98 @@ const AudioPlayer = ({ tracks, projectTitle, musicState }: { tracks: { title: st
 const GlobalPlayer = ({ musicState }: { musicState: MusicState }) => {
   if (!musicState.currentTrack) return null;
 
+  const formatTime = (time: number) => {
+    const mins = Math.floor(time / 60);
+    const secs = Math.floor(time % 60);
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[60] bg-zinc-950 border-t border-zinc-800 px-6 py-3 flex items-center justify-between backdrop-blur-lg">
-      <div className="flex items-center gap-4 min-w-0">
-        <div className="w-10 h-10 bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0">
-          <span className="text-zinc-500 text-xl">♪</span>
+    <div className="fixed bottom-0 left-0 right-0 z-[60] bg-zinc-950/90 border-t border-zinc-800 px-4 md:px-6 py-3 backdrop-blur-xl flex flex-col gap-2 md:gap-0 md:flex-row md:items-center md:justify-between">
+      <div className="flex items-center gap-4 min-w-0 md:w-1/4">
+        <div className="w-10 h-10 bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0 relative overflow-hidden group">
+           {musicState.isPlaying && (
+             <div className="absolute inset-0 flex items-center justify-center gap-0.5 opacity-30">
+                <div className="w-1 bg-zinc-400 animate-music-bar-1 h-3" />
+                <div className="w-1 bg-zinc-400 animate-music-bar-2 h-5" />
+                <div className="w-1 bg-zinc-400 animate-music-bar-3 h-4" />
+             </div>
+           )}
+          <span className="text-zinc-500 text-xl relative z-10">♪</span>
         </div>
         <div className="min-w-0">
-          <h4 className="text-zinc-100 text-sm font-bold truncate">{musicState.currentTrack.title}</h4>
-          <p className="text-zinc-500 text-xs truncate">{musicState.currentTrack.projectTitle}</p>
+          <h4 className="text-zinc-100 text-sm font-bold truncate tracking-wide">{musicState.currentTrack.title}</h4>
+          <p className="text-zinc-500 text-[10px] uppercase tracking-widest truncate">{musicState.currentTrack.projectTitle}</p>
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
-        <button
-          onClick={() => musicState.togglePlay()}
-          className="w-10 h-10 rounded-full bg-zinc-100 text-black flex items-center justify-center hover:bg-white transition-colors cursor-pointer shrink-0"
-        >
-          {musicState.isPlaying ? (
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-          ) : (
-            <svg className="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          )}
-        </button>
+      <div className="flex flex-col items-center gap-1 flex-1 max-w-2xl px-4">
+        <div className="flex items-center gap-4 md:gap-8">
+          <button
+            onClick={() => musicState.previousTrack()}
+            className="text-zinc-500 hover:text-zinc-100 transition-colors cursor-pointer p-1"
+            title="Previous Track"
+          >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+
+          <button
+            onClick={() => musicState.togglePlay()}
+            className="w-10 h-10 rounded-full bg-zinc-100 text-black flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0 shadow-lg shadow-white/5"
+          >
+            {musicState.isPlaying ? (
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            ) : (
+              <svg className="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            )}
+          </button>
+
+          <button
+            onClick={() => musicState.nextTrack()}
+            className="text-zinc-500 hover:text-zinc-100 transition-colors cursor-pointer p-1"
+            title="Next Track"
+          >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
+        </div>
+
+        <div className="w-full flex items-center gap-3">
+          <span className="text-[10px] font-mono text-zinc-500 w-8 text-right">{formatTime(musicState.currentTime)}</span>
+          <div className="relative flex-1 group py-2 flex items-center">
+            <input
+              type="range"
+              min="0"
+              max={musicState.duration || 0}
+              value={musicState.currentTime}
+              onChange={(e) => musicState.seek(parseFloat(e.target.value))}
+              className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-zinc-400 hover:accent-zinc-200 transition-all"
+            />
+          </div>
+          <span className="text-[10px] font-mono text-zinc-500 w-8">{formatTime(musicState.duration)}</span>
+        </div>
       </div>
 
-      <div className="hidden md:block">
+      <div className="hidden md:flex items-center justify-end gap-6 md:w-1/4">
+         <div className="flex items-center gap-2 group">
+            <svg className="w-4 h-4 text-zinc-500 group-hover:text-zinc-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            </svg>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={musicState.volume}
+              onChange={(e) => musicState.setVolume(parseFloat(e.target.value))}
+              className="w-20 h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-zinc-500 hover:accent-zinc-300 transition-all"
+            />
+         </div>
         <a
           href={musicState.currentTrack.file}
           download
-          className="text-xs tracking-widest uppercase text-zinc-500 hover:text-zinc-200 transition-colors flex items-center gap-2"
+          className="text-[10px] tracking-widest uppercase text-zinc-500 hover:text-zinc-200 transition-colors flex items-center gap-2 border border-zinc-800 px-3 py-1.5 hover:bg-zinc-900"
         >
-          Download <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+          MP3 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
         </a>
       </div>
     </div>
@@ -347,6 +291,8 @@ const ProjectModal = ({ project, onClose, musicState }: { project: Project; onCl
   );
 };
 
+
+
 const ProjectCard = ({ project, index, onSelect }: { project: Project; index: number; onSelect: (p: Project) => void }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -409,6 +355,8 @@ const ProjectCard = ({ project, index, onSelect }: { project: Project; index: nu
   );
 };
 
+
+
 const LyricsBar = ({ project, onSelect }: { project: Project; onSelect: (p: Project) => void }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -439,6 +387,8 @@ const LyricsBar = ({ project, onSelect }: { project: Project; onSelect: (p: Proj
     </div>
   );
 };
+
+
 
 const Section = ({ category, onSelectProject }: { category: ProjectCategory; onSelectProject: (p: Project) => void }) => {
   const info = categoryInfo[category];
@@ -472,6 +422,8 @@ const Section = ({ category, onSelectProject }: { category: ProjectCategory; onS
     </section>
   );
 };
+
+
 
 const Contact = () => (
   <section className="py-24 px-6 md:px-12 lg:px-24 bg-black border-t border-zinc-700/50">
@@ -513,23 +465,44 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   // Global Audio State
-  const [currentTrack, setCurrentTrack] = useState<{ title: string; file: string; projectTitle: string } | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<MusicTrack | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolumeState] = useState(1);
+  const [playlist, setPlaylist] = useState<MusicTrack[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     audioRef.current = new Audio();
-    audioRef.current.addEventListener('ended', () => setIsPlaying(false));
+
+    const audio = audioRef.current;
+
+    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const handleLoadedMetadata = () => setDuration(audio.duration);
+    const handleEnded = () => nextTrack();
+    const handleVolumeChange = () => setVolumeState(audio.volume);
+
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("volumechange", handleVolumeChange);
+
     return () => {
-      audioRef.current?.pause();
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("volumechange", handleVolumeChange);
+      audio.pause();
       audioRef.current = null;
     };
   }, []);
 
-  const togglePlay = (track?: { title: string; file: string; projectTitle: string }) => {
+  const togglePlay = (track?: MusicTrack, playlistData?: MusicTrack[]) => {
     if (!audioRef.current) return;
 
     if (track) {
+      if (playlistData) setPlaylist(playlistData);
       if (currentTrack?.file === track.file) {
         if (isPlaying) {
           audioRef.current.pause();
@@ -549,16 +522,56 @@ export default function App() {
         audioRef.current.pause();
         setIsPlaying(false);
       } else {
-        audioRef.current.play();
-        setIsPlaying(true);
+        if (currentTrack) {
+          audioRef.current.play();
+          setIsPlaying(true);
+        }
       }
+    }
+  };
+
+  const seek = (time: number) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
+      setCurrentTime(time);
+    }
+  };
+
+  const setVolume = (v: number) => {
+    if (audioRef.current) {
+      audioRef.current.volume = v;
+      setVolumeState(v);
+    }
+  };
+
+  const nextTrack = () => {
+    if (playlist.length > 0 && currentTrack) {
+      const currentIndex = playlist.findIndex(t => t.file === currentTrack.file);
+      const nextIndex = (currentIndex + 1) % playlist.length;
+      togglePlay(playlist[nextIndex], playlist);
+    }
+  };
+
+  const previousTrack = () => {
+    if (playlist.length > 0 && currentTrack) {
+      const currentIndex = playlist.findIndex(t => t.file === currentTrack.file);
+      const prevIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+      togglePlay(playlist[prevIndex], playlist);
     }
   };
 
   const musicState: MusicState = {
     currentTrack,
     isPlaying,
+    currentTime,
+    duration,
+    volume,
+    playlist,
     togglePlay,
+    seek,
+    setVolume,
+    nextTrack,
+    previousTrack,
   };
 
   const scrollToSection = (section: string) => {
