@@ -103,7 +103,7 @@ const Hero = () => {
           <div className="mb-4 opacity-40 animate-pulse">
             <BlackFlame className="w-8 h-8" />
           </div>
-          <img src="https://avatars.githubusercontent.com/u/246750064?v=4" alt="WBDEADSUN" className="w-32 h-32 rounded-full object-cover border-2 border-zinc-700/50 transition-all duration-700 shadow-[0_0_20px_rgba(255,255,255,0.05)]" />
+          <img src="/images/profile(1)(1).png" alt="WBDEADSUN" className="w-56 h-56 rounded-lg object-cover border-t border-l border-zinc-700/30 shadow-[20px_20px_40px_rgba(0,0,0,0.9),-5px_-5px_15px_rgba(255,255,255,0.02)] hover:scale-[1.02] transition-all duration-1000" />
         </div>
         <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-white mb-4">
           WBDEADSUN
