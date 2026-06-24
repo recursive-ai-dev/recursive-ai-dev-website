@@ -19,7 +19,7 @@ const Navigation = ({ activeSection, onNavigate }: { activeSection: string; onNa
       <div className="max-w-6xl mx-auto px-6 md:px-12">
         <div className="flex items-center justify-between h-16">
           <button onClick={() => onNavigate('home')} className="font-bold tracking-widest text-zinc-100 text-lg cursor-pointer">
-            PORTFOLIO
+            ARCHIVE
           </button>
 
           <div className="hidden md:flex items-center gap-1">
@@ -90,10 +90,10 @@ const Hero = () => {
           <div className="h-px w-16 bg-gradient-to-l from-transparent to-zinc-700" />
         </div>
 
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-widest text-zinc-100 mb-6 drop-shadow-2xl">
-          CREATIVE
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-widest text-zinc-100 mb-6 drop-shadow-2xl">
+          recursive-ai-dev
           <br />
-          <span className="text-zinc-400">WORKS</span>
+          <span className="text-zinc-400">Archives</span>
         </h1>
 
         <p className="text-zinc-500 text-lg md:text-xl tracking-widest uppercase mb-8 max-w-xl mx-auto">
@@ -137,12 +137,11 @@ const About = () => {
         <h2 className="text-3xl md:text-4xl font-bold tracking-widest uppercase text-zinc-100 mb-8">About</h2>
         <GothicDivider />
         <p className="text-zinc-400 text-lg leading-relaxed mb-8">
-          I create across mediums — from interactive games and AI research to atmospheric music and system-level software.
-          This portfolio catalogs my creative and technical work, each project a reflection of my passion for building.
+          An archive of projects across mediums — interactive games, AI research, atmospheric music, and system-level software.
+          Each entry documents work built with dedication to craft and authenticity.
         </p>
         <p className="text-zinc-500 text-base leading-relaxed">
-          Whether crafting web games, training language models, composing dark electronic tracks, or building security tools —
-          I approach each with dedication to craft and authenticity.
+          From web games and language models to dark electronic tracks and security tools — this is a growing record of recursive-ai-dev's output.
         </p>
         <GothicDivider />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-8">
@@ -421,7 +420,7 @@ const Contact = () => (
         ))}
       </div>
       <div className="pt-12 border-t border-zinc-800/50">
-        <p className="text-zinc-700 text-xs tracking-widest">&copy; 2025 &bull; CRAFTED WITH INTENTION</p>
+        <p className="text-zinc-700 text-xs tracking-widest">&copy; 2025 &bull; recursive-ai-dev Archives</p>
       </div>
     </div>
   </section>
