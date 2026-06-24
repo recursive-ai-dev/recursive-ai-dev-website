@@ -137,11 +137,7 @@ const About = () => {
         <h2 className="text-3xl md:text-4xl font-bold tracking-widest uppercase text-zinc-100 mb-8">About</h2>
         <GothicDivider />
         <p className="text-zinc-400 text-lg leading-relaxed mb-8">
-          An archive of projects across mediums — interactive games, AI research, atmospheric music, and system-level software.
-          Each entry documents work built with dedication to craft and authenticity.
-        </p>
-        <p className="text-zinc-500 text-base leading-relaxed">
-          From web games and language models to dark electronic tracks and security tools — this is a growing record of recursive-ai-dev's output.
+          I enjoy vibe coding, have been writing lyrics for 20 years, and can never seem to finish a project.
         </p>
         <GothicDivider />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-8">
