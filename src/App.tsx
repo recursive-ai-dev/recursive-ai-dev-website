@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import ProjectExplorer from './components/ProjectExplorer';
 import profileImg from './assets/profile(1)(1).png';
 import heroBg from './assets/hero-bg.jpg';
 import { projects, projectsByCategory, categoryInfo, type Project, type ProjectCategory } from './projects';
@@ -8,6 +9,21 @@ interface MusicTrack {
   file: string;
   projectTitle: string;
 }
+
+interface MusicState {
+  currentTrack: MusicTrack | null;
+  isPlaying: boolean;
+  currentTime: number;
+  duration: number;
+  volume: number;
+  playlist: MusicTrack[];
+  togglePlay: (track?: MusicTrack, playlist?: MusicTrack[]) => void;
+  seek: (time: number) => void;
+  setVolume: (volume: number) => void;
+  nextTrack: () => void;
+  previousTrack: () => void;
+}
+
 const BlackFlame = ({ className = "w-8 h-8" }: { className?: string }) => (
   <svg viewBox="0 0 50 56" className={`${className} drop-shadow-[0_0_10px_rgba(255,255,255,0.12)]`}>
     <defs>
@@ -38,14 +54,14 @@ const GothicDivider = () => (
 );
 
 const Navigation = ({ activeSection, onNavigate }: { activeSection: string; onNavigate: (section: string) => void }) => {
-  const sections = ['home', 'about', ...Object.keys(projectsByCategory)] as const;
+  const sections = ['home', 'about', 'archives', ...Object.keys(projectsByCategory)] as const;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-zinc-700/50">
       <div className="max-w-6xl mx-auto px-6 md:px-12">
         <div className="flex items-center justify-between h-16">
-          <button onClick={() => onNavigate('home')} className="font-bold tracking-widest text-zinc-100 text-lg cursor-pointer">
-            ARCHIVE
+          <button onClick={() => onNavigate('home')} className="font-bold tracking-widest text-zinc-100 text-lg cursor-pointer uppercase">
+            wbdeadsun
           </button>
 
           <div className="hidden md:flex items-center gap-1">
@@ -53,12 +69,12 @@ const Navigation = ({ activeSection, onNavigate }: { activeSection: string; onNa
               <button
                 key={section}
                 onClick={() => onNavigate(section)}
-                className={`px-4 py-2 text-xs tracking-widest uppercase transition-colors cursor-pointer
+                className={`px-4 py-2 text-[10px] tracking-widest uppercase transition-colors cursor-pointer
                            ${activeSection === section
                              ? 'text-zinc-100 border-b border-zinc-500'
                              : 'text-zinc-500 hover:text-zinc-300'}`}
               >
-                {section === 'about' ? 'About' : categoryInfo[section as ProjectCategory]?.label || section}
+                {section === 'about' ? 'About' : section === 'archives' ? 'Archives' : categoryInfo[section as ProjectCategory]?.label || section}
               </button>
             ))}
           </div>
@@ -128,10 +144,10 @@ const Hero = () => {
 };
 
 const About = () => {
-  const totalGames = projectsByCategory['games'].length;
-  const totalAI = projectsByCategory['ai'].length;
-  const totalPrograms = projectsByCategory['programs'].length;
-  const totalTracks = projectsByCategory['music'].reduce((acc, p) => acc + (p.tracks?.length || 0), 0);
+  const totalGames = projectsByCategory['games']?.length || 0;
+  const totalAI = projectsByCategory['ai']?.length || 0;
+  const totalPrograms = projectsByCategory['programs']?.length || 0;
+  const totalTracks = (projectsByCategory['music'] || []).reduce((acc, p) => acc + (p.tracks?.length || 0), 0);
 
   return (
     <section id="about" className="py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-black to-zinc-950">
@@ -141,25 +157,49 @@ const About = () => {
         <p className="text-zinc-300 text-lg leading-relaxed mb-8">
           I enjoy vibe coding, have been writing lyrics for 20 years, and can never seem to finish a project.
         </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="p-4 border border-zinc-800/50 bg-zinc-900/20">
+            <span className="block text-2xl font-bold text-zinc-100 mb-1">{totalTracks}</span>
+            <span className="text-[10px] uppercase tracking-widest text-zinc-500">Audio Records</span>
+          </div>
+          <div className="p-4 border border-zinc-800/50 bg-zinc-900/20">
+            <span className="block text-2xl font-bold text-zinc-100 mb-1">{totalAI}</span>
+            <span className="text-[10px] uppercase tracking-widest text-zinc-500">AI Entities</span>
+          </div>
+          <div className="p-4 border border-zinc-800/50 bg-zinc-900/20">
+            <span className="block text-2xl font-bold text-zinc-100 mb-1">{totalPrograms}</span>
+            <span className="text-[10px] uppercase tracking-widest text-zinc-500">Ritual Scripts</span>
+          </div>
+          <div className="p-4 border border-zinc-800/50 bg-zinc-900/20">
+            <span className="block text-2xl font-bold text-zinc-100 mb-1">{totalGames}</span>
+            <span className="text-[10px] uppercase tracking-widest text-zinc-500">Simulations</span>
+          </div>
+        </div>
         <GothicDivider />
       </div>
     </section>
   );
 };
 
-interface MusicState {
-  currentTrack: MusicTrack | null;
-  isPlaying: boolean;
-  currentTime: number;
-  duration: number;
-  volume: number;
-  playlist: MusicTrack[];
-  togglePlay: (track?: MusicTrack, playlist?: MusicTrack[]) => void;
-  seek: (time: number) => void;
-  setVolume: (volume: number) => void;
-  nextTrack: () => void;
-  previousTrack: () => void;
-}
+const ArchiveExplorer = () => {
+  return (
+    <section id="archives" className="py-24 px-6 md:px-12 lg:px-24 bg-black border-t border-zinc-900">
+      <div className="max-w-6xl mx-auto">
+         <div className="text-center mb-12">
+          <span className="text-4xl mb-4 block opacity-60">📁</span>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-widest uppercase text-zinc-100 mb-2">
+            The Archives
+          </h2>
+          <p className="text-zinc-500 text-sm tracking-widest uppercase">Deep filesystem inspection</p>
+        </div>
+
+        <div className="h-[600px] shadow-2xl">
+           <ProjectExplorer initialPath="projects" className="h-full border-zinc-700/50" />
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const AudioPlayer = ({ tracks, projectTitle, musicState }: { tracks: { title: string; file: string }[], projectTitle: string, musicState: MusicState }) => {
   const playlist: MusicTrack[] = tracks.map(t => ({ ...t, projectTitle }));
@@ -319,6 +359,7 @@ const GlobalPlayer = ({ musicState }: { musicState: MusicState }) => {
 
 const ProjectModal = ({ project, onClose, musicState }: { project: Project; onClose: () => void; musicState: MusicState }) => {
   const [lyrics, setLyrics] = useState<Record<string, string>>({});
+  const [activeTab, setActiveTab] = useState<'overview' | 'explorer' | 'live'>('overview');
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -342,90 +383,127 @@ const ProjectModal = ({ project, onClose, musicState }: { project: Project; onCl
     }
   }, [project]);
 
+  const hasLivePreview = project.path && (project.type === 'game' || project.path.endsWith('.html'));
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="relative max-w-2xl w-full max-h-[80vh] overflow-y-auto bg-zinc-950 border border-zinc-800 p-8 shadow-2xl"
+        className="relative max-w-4xl w-full h-[85vh] flex flex-col bg-zinc-950 border border-zinc-800 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-200 text-2xl cursor-pointer">&times;</button>
-
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <h3 className="text-2xl font-bold text-zinc-100 tracking-wide">{project.title}</h3>
-            <p className="text-zinc-500 text-sm tracking-widest uppercase mt-1">{categoryInfo[project.category].label}</p>
-          </div>
-        </div>
-
-        <p className="text-zinc-200 text-sm leading-relaxed mb-6">{project.details || project.description}</p>
-
-        <div className="flex flex-wrap gap-2 mb-6">
-          {project.tech.map((t) => (
-            <span key={t} className="text-xs px-2 py-1 bg-zinc-900 text-zinc-400 border border-zinc-700">{t}</span>
-          ))}
-        </div>
-
-        {project.type === 'music' && project.tracks && (
-          <div className="mb-6">
-            <h4 className="text-xs tracking-widest uppercase text-zinc-500 mb-3">Tracks ({project.tracks.length})</h4>
-            <AudioPlayer tracks={project.tracks} projectTitle={project.title} musicState={musicState} />
-          </div>
-        )}
-
-        {project.type === 'lyrics' && project.files && (
-          <div className="mb-6 space-y-8">
-            <h4 className="text-xs tracking-widest uppercase text-zinc-500 mb-3">Lyric Sheets</h4>
-            {project.files.map((f) => (
-              <div key={f} className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-sm">
-                <h5 className="text-zinc-100 font-bold mb-4 uppercase tracking-widest text-xs border-b border-zinc-800 pb-2">{f}</h5>
-                <pre className="text-zinc-400 text-sm whitespace-pre-wrap font-serif italic leading-relaxed">
-                  {lyrics[f] || "Loading..."}
-                </pre>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {project.files && project.type === 'program' && (
-          <div className="mb-6">
-            <h4 className="text-xs tracking-widest uppercase text-zinc-500 mb-3">Files</h4>
-            <div className="flex flex-wrap gap-2">
-              {project.files.map((f) => (
-                <span key={f} className="text-xs px-2 py-1 bg-zinc-900 text-zinc-400 border border-zinc-700">{f}</span>
-              ))}
+        <div className="bg-zinc-900/50 p-4 border-b border-zinc-800 flex justify-between items-center">
+          <div className="flex items-center gap-6">
+            <div>
+              <h3 className="text-lg font-bold text-zinc-100 tracking-wide uppercase leading-tight">{project.title}</h3>
+              <p className="text-zinc-500 text-[10px] tracking-[0.2em] uppercase">{project.type}</p>
             </div>
-            <div className="mt-4 flex gap-2">
-               <a
-                href={`/projects/programs/${project.id}.zip`}
-                className="inline-flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-200 transition-colors border border-zinc-700 px-4 py-2 hover:border-zinc-500"
+
+            <div className="flex items-center gap-1 ml-4 bg-black/40 p-1 rounded-sm border border-zinc-800">
+               <button
+                onClick={() => setActiveTab('overview')}
+                className={`px-3 py-1 text-[10px] uppercase tracking-widest transition-all ${activeTab === 'overview' ? 'bg-zinc-800 text-zinc-100' : 'text-zinc-500 hover:text-zinc-300'}`}
               >
-                Download Source &rarr;
-              </a>
+                Overview
+              </button>
+              <button
+                onClick={() => setActiveTab('explorer')}
+                className={`px-3 py-1 text-[10px] uppercase tracking-widest transition-all ${activeTab === 'explorer' ? 'bg-zinc-800 text-zinc-100' : 'text-zinc-500 hover:text-zinc-300'}`}
+              >
+                Explorer
+              </button>
+              {hasLivePreview && (
+                 <button
+                  onClick={() => setActiveTab('live')}
+                  className={`px-3 py-1 text-[10px] uppercase tracking-widest transition-all ${activeTab === 'live' ? 'bg-zinc-800 text-zinc-100' : 'text-zinc-500 hover:text-zinc-300'}`}
+                >
+                  Live
+                </button>
+              )}
             </div>
           </div>
-        )}
+          <button onClick={onClose} className="text-zinc-400 hover:text-zinc-200 text-2xl px-2 cursor-pointer transition-colors">&times;</button>
+        </div>
 
-        {project.path && project.type === 'ai' && (
-          <a
-            href={project.path}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-200 transition-colors border border-zinc-700 px-4 py-2 hover:border-zinc-500"
-          >
-            Open File &rarr;
-          </a>
-        )}
+        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+          {activeTab === 'overview' && (
+            <div className="animate-in fade-in duration-500">
+              <p className="text-zinc-200 text-sm leading-relaxed mb-8 border-l-2 border-zinc-800 pl-4 py-2">{project.details || project.description}</p>
 
-        {project.path && project.type === 'game' && (
-          <a
-            href={project.path}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-200 transition-colors border border-zinc-700 px-4 py-2 hover:border-zinc-500"
-          >
-            Play Game &rarr;
-          </a>
-        )}
+              <div className="flex flex-wrap gap-2 mb-8">
+                {project.tech.map((t) => (
+                  <span key={t} className="text-[10px] font-mono px-2 py-1 bg-zinc-900 text-zinc-500 border border-zinc-800">{t}</span>
+                ))}
+              </div>
+
+              {project.type === 'music' && project.tracks && (
+                <div className="mb-8">
+                  <h4 className="text-[10px] tracking-widest uppercase text-zinc-500 mb-4 pb-2 border-b border-zinc-900">Archives ({project.tracks.length} tracks)</h4>
+                  <AudioPlayer tracks={project.tracks} projectTitle={project.title} musicState={musicState} />
+                </div>
+              )}
+
+              {project.type === 'lyrics' && project.files && (
+                <div className="space-y-12">
+                  <h4 className="text-[10px] tracking-widest uppercase text-zinc-500 mb-4">Original Manuscripts</h4>
+                  {project.files.map((f) => (
+                    <div key={f} className="relative">
+                      <div className="absolute -top-4 left-4 bg-zinc-950 px-2 text-[10px] text-zinc-600 uppercase tracking-widest">{f}</div>
+                      <div className="p-8 bg-zinc-900/20 border border-zinc-800/50 rounded-sm">
+                        <pre className="text-zinc-400 text-sm whitespace-pre-wrap font-serif italic leading-relaxed">
+                          {lyrics[f] || "CRAWLING SOURCE..."}
+                        </pre>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {project.files && project.type === 'program' && (
+                <div className="mb-8">
+                  <h4 className="text-[10px] tracking-widest uppercase text-zinc-500 mb-4">Core Components</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {project.files.map((f) => (
+                      <div key={f} className="text-[10px] px-3 py-2 bg-zinc-900/50 text-zinc-400 border border-zinc-800 font-mono truncate">{f}</div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-12 flex gap-4 border-t border-zinc-900 pt-8">
+                 {project.path && (
+                   <a
+                    href={project.path}
+                    target="_blank"
+                    className="px-6 py-3 border border-zinc-700 text-zinc-300 hover:border-zinc-100 hover:text-white transition-all text-[10px] tracking-widest uppercase"
+                   >
+                    {project.type === 'game' ? 'Execute Simulation' : project.type === 'ai' ? 'Access Entity' : 'Source View'}
+                   </a>
+                 )}
+                 {project.type === 'program' && (
+                    <button className="px-6 py-3 border border-zinc-800 text-zinc-600 transition-all text-[10px] tracking-widest uppercase cursor-not-allowed">
+                      Binary Locked
+                    </button>
+                 )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'explorer' && (
+            <div className="h-full flex flex-col animate-in slide-in-from-bottom-4 duration-500">
+               <ProjectExplorer initialPath={`projects/${project.category}/${project.id}`} className="flex-1 border-none bg-transparent" />
+            </div>
+          )}
+
+          {activeTab === 'live' && hasLivePreview && (
+            <div className="h-full flex flex-col animate-in zoom-in-95 duration-500">
+              <iframe
+                src={project.path}
+                className="flex-1 w-full border border-zinc-800 bg-white"
+                title={project.title}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -436,7 +514,7 @@ const ProjectModal = ({ project, onClose, musicState }: { project: Project; onCl
 const ProjectCard = ({ project, index, onSelect }: { project: Project; index: number; onSelect: (p: Project) => void }) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  const categoryLabel = categoryInfo[project.category].icon;
+  const categoryLabel = categoryInfo[project.category]?.icon || '◈';
 
   return (
     <div
@@ -460,7 +538,7 @@ const ProjectCard = ({ project, index, onSelect }: { project: Project; index: nu
           <h3 className="text-xl font-bold text-zinc-100 tracking-wide group-hover:text-white transition-colors">
             {categoryLabel} {project.title}
           </h3>
-          <span className={`text-xs font-mono tracking-wider px-2 py-0.5 border ${
+          <span className={`text-[10px] font-mono tracking-wider px-2 py-0.5 border ${
             project.type === 'game' ? 'text-emerald-400 border-emerald-800/50' :
             project.type === 'music' ? 'text-violet-400 border-violet-800/50' :
             project.type === 'ai' ? 'text-cyan-400 border-cyan-800/50' :
@@ -476,18 +554,18 @@ const ProjectCard = ({ project, index, onSelect }: { project: Project; index: nu
 
         <div className="flex flex-wrap gap-2 mb-4">
           {project.tech.slice(0, 3).map((tech) => (
-            <span key={tech} className="text-xs px-2 py-1 bg-zinc-900/80 text-zinc-400 border border-zinc-700
+            <span key={tech} className="text-[10px] px-2 py-1 bg-zinc-900/80 text-zinc-400 border border-zinc-700
                                        group-hover:border-zinc-600 transition-colors">
               {tech}
             </span>
           ))}
           {project.tech.length > 3 && (
-            <span className="text-xs px-2 py-1 text-zinc-500">+{project.tech.length - 3}</span>
+            <span className="text-[10px] px-2 py-1 text-zinc-500">+{project.tech.length - 3}</span>
           )}
         </div>
 
         <div className="inline-flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-200 transition-colors">
-          <span>View Details</span>
+          <span className="text-[10px] uppercase tracking-widest font-bold">View Archive</span>
           <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
         </div>
       </div>
@@ -513,14 +591,14 @@ const LyricsBar = ({ project, onSelect }: { project: Project; onSelect: (p: Proj
       <div className="relative flex items-center gap-4 p-3 md:p-4">
         <span className="text-2xl opacity-60">{categoryInfo[project.category].icon}</span>
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-bold text-zinc-100 tracking-wide">{project.title}</h3>
+          <h3 className="text-lg font-bold text-zinc-100 tracking-wide uppercase">{project.title}</h3>
           <p className="text-zinc-400 text-sm leading-relaxed truncate">{project.description}</p>
         </div>
-        <span className="text-xs font-mono tracking-wider px-2 py-0.5 border text-amber-400 border-amber-800/50 shrink-0">
+        <span className="text-[10px] font-mono tracking-wider px-2 py-0.5 border text-amber-400 border-amber-800/50 shrink-0">
           {project.type}
         </span>
         <div className="flex items-center gap-2 text-xs text-zinc-400 shrink-0">
-          <span>View Details</span>
+          <span className="text-[10px] uppercase tracking-widest font-bold">View Details</span>
           <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
         </div>
       </div>
@@ -570,7 +648,7 @@ const Contact = () => (
     <div className="max-w-4xl mx-auto text-center">
       <h2 className="text-3xl md:text-4xl font-bold tracking-widest uppercase text-zinc-100 mb-8">Contact</h2>
       <GothicDivider />
-      <p className="text-zinc-300 mb-8">
+      <p className="text-zinc-300 mb-8 uppercase tracking-widest text-xs">
         Interested in collaborating or have questions? Reach out.
       </p>
       <div className="flex flex-wrap justify-center gap-6 mb-12">
@@ -579,7 +657,7 @@ const Contact = () => (
           target="_blank"
           rel="noopener noreferrer"
           className="px-6 py-3 border border-zinc-700 text-zinc-300 hover:border-zinc-500
-                     hover:text-zinc-100 transition-all text-sm tracking-widest uppercase"
+                     hover:text-zinc-100 transition-all text-[10px] tracking-widest uppercase"
         >
           GitHub &rarr;
         </a>
@@ -588,21 +666,21 @@ const Contact = () => (
           target="_blank"
           rel="noopener noreferrer"
           className="px-6 py-3 border border-zinc-700 text-zinc-300 hover:border-zinc-500
-                     hover:text-zinc-100 transition-all text-sm tracking-widest uppercase"
+                     hover:text-zinc-100 transition-all text-[10px] tracking-widest uppercase"
         >
           YouTube &rarr;
         </a>
         <a
           href="tel:+15069535591"
           className="px-6 py-3 border border-zinc-700 text-zinc-300 hover:border-zinc-500
-                     hover:text-zinc-100 transition-all text-sm tracking-widest uppercase"
+                     hover:text-zinc-100 transition-all text-[10px] tracking-widest uppercase"
         >
           +1 506-953-5591 &rarr;
         </a>
       </div>
       <div className="pt-12 border-t border-zinc-800/50">
-        <p className="text-zinc-500 text-xs tracking-widest mb-2">&copy; 2025 &bull; WBDEADSUN Archives</p>
-        <p className="text-zinc-600 text-[10px] tracking-widest uppercase">+1 506-953-5591</p>
+        <p className="text-zinc-500 text-[10px] tracking-[0.4em] mb-2 uppercase">&copy; 2025 &bull; WBDEADSUN Archives</p>
+        <p className="text-zinc-600 text-[9px] tracking-[0.2em] uppercase">+1 506-953-5591</p>
       </div>
     </div>
   </section>
@@ -739,6 +817,7 @@ export default function App() {
       <main>
         <Hero />
         <About />
+        <ArchiveExplorer />
 
         {(Object.keys(projectsByCategory) as ProjectCategory[]).map((category) => (
           <div key={category} id={category}>
