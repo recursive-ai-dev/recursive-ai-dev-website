@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import profileImg from './assets/profile(1)(1).png';
+import heroBg from './assets/hero-bg.jpg';
 import { projects, projectsByCategory, categoryInfo, type Project, type ProjectCategory } from './projects';
 
 interface MusicTrack {
@@ -87,7 +89,7 @@ const Hero = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
         <img
-          src="/images/hero-bg.jpg"
+          src={heroBg}
           alt=""
           className="w-full h-full object-cover opacity-30"
         />
@@ -108,7 +110,7 @@ const Hero = () => {
           <div className="mb-4 opacity-40 animate-pulse">
             <BlackFlame className="w-8 h-8" />
           </div>
-          <img src="/images/profile(1)(1).png" alt="WBDEADSUN" className="w-56 h-56 rounded-lg object-cover border-t border-l border-zinc-700/30 shadow-[20px_20px_40px_rgba(0,0,0,0.9),-5px_-5px_15px_rgba(255,255,255,0.02)] hover:scale-[1.02] transition-all duration-1000" />
+          <img src={profileImg} alt="WBDEADSUN" className="w-56 h-56 rounded-lg object-cover border-t border-l border-zinc-700/30 shadow-[20px_20px_40px_rgba(0,0,0,0.9),-5px_-5px_15px_rgba(255,255,255,0.02)] hover:scale-[1.02] transition-all duration-1000" />
         </div>
         <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-white mb-4">
           WBDEADSUN
