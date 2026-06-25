@@ -116,7 +116,7 @@ const Hero = () => {
           WBDEADSUN
         </h1>
         <p className="text-zinc-500 tracking-[0.5em] uppercase text-sm md:text-base">
-          Digital Necromancy &bull; Sonic Occultism
+          Digital Summoning Rituals and Music
         </p>
       </div>
 
@@ -142,19 +142,6 @@ const About = () => {
           I enjoy vibe coding, have been writing lyrics for 20 years, and can never seem to finish a project.
         </p>
         <GothicDivider />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-8">
-          {[
-            { label: "Games", value: `${totalGames}` },
-            { label: "AI Projects", value: `${totalAI}` },
-            { label: "Tracks", value: `${totalTracks}+` },
-            { label: "Programs", value: `${totalPrograms}` },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-3xl font-bold text-zinc-200 mb-2">{stat.value}</div>
-              <div className="text-xs text-zinc-500 tracking-widest uppercase">{stat.label}</div>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
