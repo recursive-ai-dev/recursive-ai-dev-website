@@ -61,7 +61,7 @@ const Navigation = ({ activeSection, onNavigate }: { activeSection: string; onNa
       <div className="max-w-6xl mx-auto px-6 md:px-12">
         <div className="flex items-center justify-between h-16">
           <button onClick={() => onNavigate('home')} className="font-bold tracking-widest text-zinc-100 text-lg cursor-pointer uppercase">
-            wbdeadsun
+            damien
           </button>
 
           <div className="hidden md:flex items-center gap-1">
@@ -126,7 +126,7 @@ const Hero = () => {
           <div className="mb-4 opacity-40 animate-pulse">
             <BlackFlame className="w-8 h-8" />
           </div>
-          <img src={profileImg} alt="WBDEADSUN" className="w-56 h-56 rounded-lg object-cover border-t border-l border-zinc-700/30 shadow-[20px_20px_40px_rgba(0,0,0,0.9),-5px_-5px_15px_rgba(255,255,255,0.02)] hover:scale-[1.02] transition-all duration-1000" />
+          <img src={profileImg} alt="DAMIEN" className="w-56 h-56 rounded-lg object-cover border-t border-l border-zinc-700/30 shadow-[20px_20px_40px_rgba(0,0,0,0.9),-5px_-5px_15px_rgba(255,255,255,0.02)] hover:scale-[1.02] transition-all duration-1000" />
         </div>
         <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-white mb-4">
           WBDEADSUN
