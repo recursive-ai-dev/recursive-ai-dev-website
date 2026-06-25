@@ -1,0 +1,25 @@
+{
+  "name": "rfse-conversational",
+  "version": "1.0.0",
+  "description": "The Relational Fixpoint Synthesis Engine - A novel AI model for conversational dialog based on algebraic fixpoint theory",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node test/simple-test.js",
+    "serve": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "AI",
+    "conversation",
+    "fixpoint",
+    "algebraic",
+    "synthesis",
+    "novel",
+    "rfse"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
