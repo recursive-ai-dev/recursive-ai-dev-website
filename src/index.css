@@ -94,6 +94,34 @@ a {
   box-shadow: 0 0 30px rgba(63, 63, 70, 0.2);
 }
 
+/* Music bar animations */
+@keyframes music-bar-1 {
+  0%, 100% { height: 30%; }
+  50% { height: 100%; }
+}
+
+@keyframes music-bar-2 {
+  0%, 100% { height: 60%; }
+  50% { height: 30%; }
+}
+
+@keyframes music-bar-3 {
+  0%, 100% { height: 40%; }
+  50% { height: 80%; }
+}
+
+.animate-music-bar-1 {
+  animation: music-bar-1 0.8s ease-in-out infinite;
+}
+
+.animate-music-bar-2 {
+  animation: music-bar-2 1.1s ease-in-out infinite;
+}
+
+.animate-music-bar-3 {
+  animation: music-bar-3 0.9s ease-in-out infinite;
+}
+
 /* Decorative border animation */
 @keyframes borderPulse {
   0%, 100% {
@@ -142,6 +170,18 @@ a {
   top: -4px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+/* Reveal animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .gothic-border::after {

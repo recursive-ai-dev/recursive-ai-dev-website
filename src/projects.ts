@@ -3,13 +3,15 @@ export interface Track {
   file: string;
 }
 
+export type ProjectType = 'game' | 'music' | 'program' | 'ai' | 'lyrics' | 'lore';
+
 export interface Project {
   id: string;
   title: string;
   description: string;
   tech: string[];
   category: ProjectCategory;
-  type: 'game' | 'music' | 'program' | 'ai' | 'lyrics';
+  type: ProjectType;
   link?: string;
   path?: string;
   tracks?: Track[];
@@ -212,7 +214,7 @@ export const projects: Project[] = [
     description: "Expanded character lore for a brutal dark medieval fantasy RPG — a court-martialed Knight-Captain whose body was never recovered.",
     tech: ["Worldbuilding", "Dark Fantasy", "RPG"],
     category: "characters",
-    type: "program",
+    type: "lore",
     path: "projects/characters/Fighter",
     details: "Aldric Voss, formerly Knight-Captain of the 7th Regiment. Tried, sentenced to hang, and executed — but the body was never recovered. The lorebook unfolds through a court-martial transcript and marginal annotations written by someone who knew the truth.",
     files: ["Fighter_Lorebook.md", "Fighter_Templates.md"],
@@ -223,7 +225,7 @@ export const projects: Project[] = [
     description: "A knight drowned in identity rather than water. A coroner's ledger, a misidentified corpse, and a figure who walked away from his own death.",
     tech: ["Worldbuilding", "Dark Fantasy", "RPG"],
     category: "characters",
-    type: "program",
+    type: "lore",
     path: "projects/characters/Knight",
     details: "The remains pulled from the Blackwater Ford wore armor too fine for the corpse's condition. The Order of the Iron Word had been dissolved for seventeen years. The river took someone else that night — this one walked out.",
     files: ["Knight_Lorebook.md", "Knight_Templates.md"],
@@ -234,7 +236,7 @@ export const projects: Project[] = [
     description: "A paladin declared Blessed in absentia, martyred at the Pale Crossing — then found alive three hundred miles from her own shrine.",
     tech: ["Worldbuilding", "Dark Fantasy", "RPG"],
     category: "characters",
-    type: "program",
+    type: "lore",
     path: "projects/characters/Paladin",
     details: "Solenne of Ashveil held the ford for nine hours. The church canonized her, built a shrine, and filled it with eleven thousand pilgrims. Then the inquisition confirmed she was still alive — and still counting the dead.",
     files: ["Paladin_Lorebook.md"],

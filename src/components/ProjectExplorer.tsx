@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { fileTree } from '../fileTree';
 
 interface FileNode {
@@ -41,15 +41,17 @@ const ProjectExplorer: React.FC<ProjectExplorerProps> = ({ initialPath = ROOT_NA
     return parts.length > 0 ? parts : [ROOT_NAME];
   });
 
-  const { node: currentNode, validPath } = useMemo(() => resolveNode(currentPath), [currentPath]);
+  const { currentNode, displayPath } = useMemo(() => {
+    const { node, validPath } = resolveNode(currentPath);
+    return { currentNode: node, displayPath: validPath };
+  }, [currentPath]);
 
-  // If the resolved path is shorter than requested, snap the UI back to the valid path.
-  const displayPath = validPath;
-  const pathMismatch = displayPath.length !== currentPath.length;
-  if (pathMismatch) {
-    // Defer the state update to avoid setting state during render.
-    queueMicrotask(() => setCurrentPath(displayPath));
-  }
+  // Sync state if mismatched to ensure internal state correctness
+  useEffect(() => {
+    if (displayPath.length !== currentPath.length) {
+      setCurrentPath(displayPath);
+    }
+  }, [displayPath, currentPath.length]);
 
   const navigateTo = (path: string) => {
     const parts = path.split('/').filter(Boolean);
@@ -113,7 +115,7 @@ const ProjectExplorer: React.FC<ProjectExplorerProps> = ({ initialPath = ROOT_NA
     <div className={`flex flex-col h-full bg-black/40 border border-zinc-800 rounded-sm font-mono ${className}`}>
       <div className="bg-zinc-900/80 px-4 py-2 border-b border-zinc-800 flex justify-between items-center">
         <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-500">File Explorer</span>
-        <span className="text-[10px] text-zinc-600">v1.1.0-stable</span>
+        <span className="text-[10px] text-zinc-600">v1.2.0-stable</span>
       </div>
 
       <div className="p-4 flex-1 overflow-y-auto custom-scrollbar">
